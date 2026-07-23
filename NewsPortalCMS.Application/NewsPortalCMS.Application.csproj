@@ -6,4 +6,19 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Common\" />
+    <Folder Include="DTOs\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="Mappings\" />
+    <Folder Include="Exceptions\" />
+    <Folder Include="Validators\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NewsPortalCMS.Domain\NewsPortalCMS.Domain.csproj" />
+    <ProjectReference Include="..\NewsPortalCMS.Shared\NewsPortalCMS.Shared.csproj" />
+  </ItemGroup>
+
 </Project>

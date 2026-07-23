@@ -6,4 +6,18 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\" />
+    <Folder Include="Configurations\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="Seed\" />
+    <Folder Include="Repositories\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NewsPortalCMS.Application\NewsPortalCMS.Application.csproj" />
+    <ProjectReference Include="..\NewsPortalCMS.Domain\NewsPortalCMS.Domain.csproj" />
+    <ProjectReference Include="..\NewsPortalCMS.Shared\NewsPortalCMS.Shared.csproj" />
+  </ItemGroup>
+
 </Project>
