@@ -1,11 +1,11 @@
-using Microsoft.EntityFrameworkCore;
-using NewsPortalCMS.Infrastructure.Data;
-
-using Microsoft.AspNetCore.Identity;
-using NewsPortalCMS.Domain.Entities;
-
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using NewsPortalCMS.Application.Interfaces;
+using NewsPortalCMS.Application.Services;
+using NewsPortalCMS.Domain.Entities;
+using NewsPortalCMS.Infrastructure.Data;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -55,6 +55,11 @@ builder.Services.AddAuthentication(options =>
         ClockSkew = TimeSpan.Zero
     };
 });
+
+
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+
 
 
 builder.Services.AddControllers();
