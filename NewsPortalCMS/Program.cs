@@ -154,6 +154,17 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 // Category Service
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 
+// SubCategory Repository
+builder.Services.AddScoped<ISubCategoryRepository, SubCategoryRepository>();
+
+// SubCategory Service
+builder.Services.AddScoped<ISubCategoryService, SubCategoryService>();
+
+
+
+
+
+
 
 
 // ============================================================
