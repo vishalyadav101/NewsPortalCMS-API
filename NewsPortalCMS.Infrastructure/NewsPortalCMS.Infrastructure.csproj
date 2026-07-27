@@ -9,7 +9,6 @@
   <ItemGroup>
     <Folder Include="Configurations\" />
     <Folder Include="Helpers\" />
-    <Folder Include="Seed\" />
     <Folder Include="Repositories\" />
   </ItemGroup>
 

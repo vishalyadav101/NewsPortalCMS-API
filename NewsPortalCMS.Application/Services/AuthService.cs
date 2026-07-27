@@ -8,10 +8,12 @@ namespace NewsPortalCMS.Application.Services;
 public class AuthService : IAuthService
 {
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly JwtTokenService _jwtTokenService;
 
-    public AuthService(UserManager<ApplicationUser> userManager)
+    public AuthService(UserManager<ApplicationUser> userManager, JwtTokenService jwtTokenService)
     {
         _userManager = userManager;
+        _jwtTokenService = jwtTokenService;
     }
 
     public async Task<string> RegisterAsync(RegisterDto model)
@@ -61,13 +63,21 @@ public class AuthService : IAuthService
             return "Invalid Username";
         }
 
-        var result = await _userManager.CheckPasswordAsync(user, model.Password);
+        if (!user.IsActive)
+        {
+            return "User account is inactive";
+        }
 
-        if (!result)
+        var isPasswordValid =
+            await _userManager.CheckPasswordAsync(user, model.Password);
+
+        if (!isPasswordValid)
         {
             return "Invalid Password";
         }
 
-        return "Login Successful";
+        var token = await _jwtTokenService.GenerateTokenAsync(user);
+
+        return token;
     }
 }

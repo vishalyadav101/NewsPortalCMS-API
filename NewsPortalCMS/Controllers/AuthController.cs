@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using NewsPortalCMS.Application.DTOs.Auth;
 using NewsPortalCMS.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace NewsPortalCMS.Controllers
 {
@@ -28,6 +29,19 @@ namespace NewsPortalCMS.Controllers
         {
             var result = await _authService.LoginAsync(model);
             return Ok(result);
+        }
+        [Authorize]
+        [HttpGet("profile")]
+        public IActionResult Profile()
+        {
+            return Ok("You are authenticated.");
+        }
+
+        [Authorize(Roles = "SuperAdmin")]
+        [HttpGet("superadmin")]
+        public IActionResult SuperAdmin()
+        {
+            return Ok("Welcome SuperAdmin");
         }
     }
 }
