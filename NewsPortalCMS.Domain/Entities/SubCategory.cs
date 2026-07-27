@@ -1,9 +1,13 @@
 ﻿namespace NewsPortalCMS.Domain.Entities;
 
-public class Category
+public class SubCategory
 {
     public int Id { get; set; }
 
+    // Parent Category
+    public int CategoryId { get; set; }
+
+    // SubCategory details
     public string Name { get; set; } = string.Empty;
 
     public string Slug { get; set; } = string.Empty;
@@ -18,7 +22,6 @@ public class Category
 
     public DateTime? UpdatedDate { get; set; }
 
-    // Ek Category ke andar multiple SubCategories ho sakti hain
-    public ICollection<SubCategory> SubCategories { get; set; }
-        = new List<SubCategory>();
+    // Navigation Property
+    public Category Category { get; set; } = null!;
 }
