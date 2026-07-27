@@ -31,7 +31,9 @@ using NewsPortalCMS.Infrastructure.Seed;
 // JWT secret key ko bytes me convert karne ke liye
 using System.Text;
 
-
+using NewsPortalCMS.Infrastructure.Services;
+using NewsPortalCMS.Infrastructure.Repositories;
+ 
 // ============================================================
 // 1. CREATE WEB APPLICATION BUILDER
 // ============================================================
@@ -142,11 +144,16 @@ builder.Services.AddAuthentication(options =>
 // 5. APPLICATION SERVICES / DEPENDENCY INJECTION
 // ============================================================
 
-// IAuthService maangne par AuthService provide ki jayegi.
+// Authentication Services
 builder.Services.AddScoped<IAuthService, AuthService>();
-
-// JWT generate karne wali service.
 builder.Services.AddScoped<JwtTokenService>();
+
+// Category Repository
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+// Category Service
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+
 
 
 // ============================================================

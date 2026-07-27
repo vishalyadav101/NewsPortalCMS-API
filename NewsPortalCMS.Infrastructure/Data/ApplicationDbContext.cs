@@ -14,5 +14,15 @@ public class ApplicationDbContext
     }
 
     // DbSets hum baad me add karenge
+    public DbSet<Category> Categories { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+
+        builder.ApplyConfigurationsFromAssembly(
+            typeof(ApplicationDbContext).Assembly
+        );
+    }
 
 }
