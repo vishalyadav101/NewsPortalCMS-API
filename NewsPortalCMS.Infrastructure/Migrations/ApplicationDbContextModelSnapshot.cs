@@ -285,11 +285,10 @@ namespace NewsPortalCMS.Infrastructure.Migrations
                     b.ToTable("Categories");
                 });
 
-<<<<<<< HEAD
             modelBuilder.Entity("NewsPortalCMS.Domain.Entities.SubCategory", b =>
-=======
+
             modelBuilder.Entity("NewsPortalCMS.Entities.News", b =>
->>>>>>> 06947c31cd126af14b271c43ce2d11f7485d3d27
+
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -297,7 +296,7 @@ namespace NewsPortalCMS.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-<<<<<<< HEAD
+
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
@@ -333,7 +332,7 @@ namespace NewsPortalCMS.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("SubCategories");
-=======
+
                     b.Property<string>("Author")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -387,8 +386,7 @@ namespace NewsPortalCMS.Infrastructure.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("News");
->>>>>>> 06947c31cd126af14b271c43ce2d11f7485d3d27
-                });
+                }));
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
@@ -440,35 +438,32 @@ namespace NewsPortalCMS.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
-
-<<<<<<< HEAD
             modelBuilder.Entity("NewsPortalCMS.Domain.Entities.SubCategory", b =>
                 {
                     b.HasOne("NewsPortalCMS.Domain.Entities.Category", "Category")
                         .WithMany("SubCategories")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
-=======
-            modelBuilder.Entity("NewsPortalCMS.Entities.News", b =>
-                {
-                    b.HasOne("NewsPortalCMS.Domain.Entities.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
->>>>>>> 06947c31cd126af14b271c43ce2d11f7485d3d27
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("Category");
-                });
-<<<<<<< HEAD
+                    modelBuilder.Entity("NewsPortalCMS.Entities.News", b =>
+                        {
+                            b.HasOne("NewsPortalCMS.Domain.Entities.Category", "Category")
+                                .WithMany()
+                                .HasForeignKey("CategoryId")
+                                .OnDelete(DeleteBehavior.Cascade)
 
-            modelBuilder.Entity("NewsPortalCMS.Domain.Entities.Category", b =>
-                {
-                    b.Navigation("SubCategories");
+                                .IsRequired();
+
+                            b.Navigation("Category");
+                        });
+
+
+                    modelBuilder.Entity("NewsPortalCMS.Domain.Entities.Category", b =>
+                        {
+                            b.Navigation("SubCategories");
+                        });
+
                 });
-=======
->>>>>>> 06947c31cd126af14b271c43ce2d11f7485d3d27
-#pragma warning restore 612, 618
         }
     }
 }
