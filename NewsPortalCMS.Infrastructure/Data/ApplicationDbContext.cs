@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using NewsPortalCMS.Domain.Entities;
-using Microsoft.AspNetCore.Identity;
+using NewsPortalCMS.Entities;
 
 namespace NewsPortalCMS.Infrastructure.Data;
 
@@ -15,6 +16,8 @@ public class ApplicationDbContext
 
     // DbSets hum baad me add karenge
     public DbSet<Category> Categories { get; set; }
+
+    public DbSet<News> News { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

@@ -33,7 +33,11 @@ using System.Text;
 
 using NewsPortalCMS.Infrastructure.Services;
 using NewsPortalCMS.Infrastructure.Repositories;
- 
+using NewsPortalCMS.Services.Interfaces;
+using NewsPortalCMS.Services;
+using NewsPortalCMS.Interfaces;
+using NewsPortalCMS.Repositories;
+
 // ============================================================
 // 1. CREATE WEB APPLICATION BUILDER
 // ============================================================
@@ -154,7 +158,11 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 // Category Service
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 
+// News Repository
+builder.Services.AddScoped<INewsRepository, NewsRepository>();
 
+// News Services
+builder.Services.AddScoped<INewsService, NewsService>();
 
 // ============================================================
 // 6. CONTROLLERS
@@ -290,6 +298,8 @@ app.UseAuthorization();
 // /api/Auth/login
 // /api/Auth/register
 // ko application se map karta hai.
+
+app.UseStaticFiles();
 app.MapControllers();
 
 
