@@ -29,6 +29,7 @@
     <Folder Include="Filters\" />
     <Folder Include="Helpers\" />
     <Folder Include="Middlewares\" />
+    <Folder Include="wwwroot\uploads\news\" />
   </ItemGroup>
 
   <ItemGroup>

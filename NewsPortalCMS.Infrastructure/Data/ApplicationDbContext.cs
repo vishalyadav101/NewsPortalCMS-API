@@ -2,6 +2,10 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using NewsPortalCMS.Domain.Entities;
+ 
+ 
+using NewsPortalCMS.Entities;
+ 
 
 namespace NewsPortalCMS.Infrastructure.Data;
 
@@ -20,8 +24,12 @@ public class ApplicationDbContext
     // SubCategory
     public DbSet<SubCategory> SubCategories { get; set; }
 
+
     // Tag
     public DbSet<Tag> Tags { get; set; }
+
+    public DbSet<News> News { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
