@@ -1,29 +1,36 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using NewsPortalCMS.Domain.Entities;
-using Microsoft.AspNetCore.Identity;
 
 namespace NewsPortalCMS.Infrastructure.Data;
 
 public class ApplicationDbContext
     : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    public ApplicationDbContext(
+        DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
     }
 
-    // DbSets hum baad me add karenge
+    // Category
     public DbSet<Category> Categories { get; set; }
+
+    // SubCategory
     public DbSet<SubCategory> SubCategories { get; set; }
+
+    // Tag
+    public DbSet<Tag> Tags { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
 
+        // Infrastructure project ki saari IEntityTypeConfiguration
+        // classes automatically apply hongi.
         builder.ApplyConfigurationsFromAssembly(
             typeof(ApplicationDbContext).Assembly
         );
     }
-
 }
