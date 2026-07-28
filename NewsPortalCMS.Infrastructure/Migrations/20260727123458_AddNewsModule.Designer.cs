@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NewsPortalCMS.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using NewsPortalCMS.Infrastructure.Data;
 namespace NewsPortalCMS.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260727123458_AddNewsModule")]
+    partial class AddNewsModule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -285,11 +288,7 @@ namespace NewsPortalCMS.Infrastructure.Migrations
                     b.ToTable("Categories");
                 });
 
-<<<<<<< HEAD
-            modelBuilder.Entity("NewsPortalCMS.Domain.Entities.SubCategory", b =>
-=======
             modelBuilder.Entity("NewsPortalCMS.Entities.News", b =>
->>>>>>> 06947c31cd126af14b271c43ce2d11f7485d3d27
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -297,43 +296,6 @@ namespace NewsPortalCMS.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-<<<<<<< HEAD
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int>("DisplayOrder")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Slug")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId", "Slug")
-                        .IsUnique();
-
-                    b.ToTable("SubCategories");
-=======
                     b.Property<string>("Author")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -387,7 +349,6 @@ namespace NewsPortalCMS.Infrastructure.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("News");
->>>>>>> 06947c31cd126af14b271c43ce2d11f7485d3d27
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -441,33 +402,16 @@ namespace NewsPortalCMS.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-<<<<<<< HEAD
-            modelBuilder.Entity("NewsPortalCMS.Domain.Entities.SubCategory", b =>
-                {
-                    b.HasOne("NewsPortalCMS.Domain.Entities.Category", "Category")
-                        .WithMany("SubCategories")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
-=======
             modelBuilder.Entity("NewsPortalCMS.Entities.News", b =>
                 {
                     b.HasOne("NewsPortalCMS.Domain.Entities.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
->>>>>>> 06947c31cd126af14b271c43ce2d11f7485d3d27
                         .IsRequired();
 
                     b.Navigation("Category");
                 });
-<<<<<<< HEAD
-
-            modelBuilder.Entity("NewsPortalCMS.Domain.Entities.Category", b =>
-                {
-                    b.Navigation("SubCategories");
-                });
-=======
->>>>>>> 06947c31cd126af14b271c43ce2d11f7485d3d27
 #pragma warning restore 612, 618
         }
     }
