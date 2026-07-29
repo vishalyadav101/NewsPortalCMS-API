@@ -164,6 +164,9 @@ builder.Services.AddScoped<ISubCategoryService, SubCategoryService>();
 builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<ITagService, TagService>();
 
+builder.Services.AddScoped<INewsTagRepository, NewsTagRepository>();
+builder.Services.AddScoped<INewsTagService, NewsTagService>();
+
 
 
 
