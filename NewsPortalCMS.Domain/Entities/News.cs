@@ -45,5 +45,6 @@ namespace NewsPortalCMS.Entities
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public DateTime? UpdatedAt { get; set; }
+        public ICollection<NewsTag> NewsTags { get; set; } = new List<NewsTag>();
     }
 }
