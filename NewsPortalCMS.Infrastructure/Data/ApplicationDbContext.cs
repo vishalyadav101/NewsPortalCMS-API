@@ -29,6 +29,7 @@ public class ApplicationDbContext
     public DbSet<Tag> Tags { get; set; }
 
     public DbSet<News> News { get; set; }
+    public DbSet<NewsTag> NewsTags { get; set; }
 
     public DbSet<Media> Media { get; set; }
 
