@@ -3,40 +3,33 @@
 // ============================================================
 
 // JWT Authentication ke liye
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-
-// ASP.NET Core Identity ke liye
-using Microsoft.AspNetCore.Identity;
-
-// Entity Framework Core ke liye
-using Microsoft.EntityFrameworkCore;
-
-// JWT token validation aur security key ke liye
-using Microsoft.IdentityModel.Tokens;
-
-// Swagger me JWT Authorize button configure karne ke liye
-using Microsoft.OpenApi.Models;
-
-// Application layer
-using NewsPortalCMS.Application.Interfaces;
-using NewsPortalCMS.Application.Services;
-
-// Domain layer
-using NewsPortalCMS.Domain.Entities;
-
-// Infrastructure layer
-using NewsPortalCMS.Infrastructure.Data;
-using NewsPortalCMS.Infrastructure.Seed;
-
 // JWT secret key ko bytes me convert karne ke liye
 using System.Text;
-
-using NewsPortalCMS.Infrastructure.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+// ASP.NET Core Identity ke liye
+using Microsoft.AspNetCore.Identity;
+// Entity Framework Core ke liye
+using Microsoft.EntityFrameworkCore;
+// JWT token validation aur security key ke liye
+using Microsoft.IdentityModel.Tokens;
+// Swagger me JWT Authorize button configure karne ke liye
+using Microsoft.OpenApi.Models;
+// Application layer
+using NewsPortalCMS.Application.Interfaces;
+using NewsPortalCMS.Application.Interfaces.Repositories;
+using NewsPortalCMS.Application.Interfaces.Services;
+using NewsPortalCMS.Application.Services;
+// Domain layer
+using NewsPortalCMS.Domain.Entities;
+// Infrastructure layer
+using NewsPortalCMS.Infrastructure.Data;
 using NewsPortalCMS.Infrastructure.Repositories;
-using NewsPortalCMS.Services.Interfaces;
-using NewsPortalCMS.Services;
+using NewsPortalCMS.Infrastructure.Seed;
+using NewsPortalCMS.Infrastructure.Services;
 using NewsPortalCMS.Interfaces;
 using NewsPortalCMS.Repositories;
+using NewsPortalCMS.Services;
+using NewsPortalCMS.Services.Interfaces;
 
 // ============================================================
 // 1. CREATE WEB APPLICATION BUILDER
@@ -179,6 +172,11 @@ builder.Services.AddScoped<ITagService, TagService>();
 
 // News Services
 builder.Services.AddScoped<INewsService, NewsService>();
+
+
+//Media
+builder.Services.AddScoped<IMediaRepository, MediaRepository>();
+builder.Services.AddScoped<IMediaService, MediaService>();
 
 // ============================================================
 // 6. CONTROLLERS
