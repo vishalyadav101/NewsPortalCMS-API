@@ -30,6 +30,8 @@ public class ApplicationDbContext
 
     public DbSet<News> News { get; set; }
 
+    public DbSet<Media> Media { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
