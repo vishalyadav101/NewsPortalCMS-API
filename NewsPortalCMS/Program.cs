@@ -4,6 +4,8 @@
 
 // JWT Authentication ke liye
 // JWT secret key ko bytes me convert karne ke liye
+using AutoMapper;
+using NewsPortalCMS.Application.Mappings;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 // ASP.NET Core Identity ke liye
@@ -31,11 +33,14 @@ using NewsPortalCMS.Repositories;
 using NewsPortalCMS.Services;
 using NewsPortalCMS.Services.Interfaces;
 
+
+
 // ============================================================
 // 1. CREATE WEB APPLICATION BUILDER
 // ============================================================
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
 
 // ============================================================
@@ -137,6 +142,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 
+
 // ============================================================
 // 5. APPLICATION SERVICES / DEPENDENCY INJECTION
 // ============================================================
@@ -178,6 +184,9 @@ builder.Services.AddScoped<INewsService, NewsService>();
 builder.Services.AddScoped<IMediaRepository, MediaRepository>();
 builder.Services.AddScoped<IMediaService, MediaService>();
 
+//Static Page
+builder.Services.AddScoped<IStaticPageService, StaticPageService>();
+builder.Services.AddScoped<IStaticPageRepository, StaticPageRepository>();
 // ============================================================
 // 6. CONTROLLERS
 // ============================================================
