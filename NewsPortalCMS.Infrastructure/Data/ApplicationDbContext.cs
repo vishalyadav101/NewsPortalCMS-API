@@ -31,6 +31,7 @@ public class ApplicationDbContext
     public DbSet<News> News { get; set; }
 
     public DbSet<Media> Media { get; set; }
+    public DbSet<StaticPage> StaticPages { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder builder)
