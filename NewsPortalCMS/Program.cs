@@ -44,8 +44,10 @@ using NewsPortalCMS.Services.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 builder.Services.AddAutoMapper(typeof(MenuProfile).Assembly);
+builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddValidatorsFromAssemblyContaining<CreateMenuValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 
 // ============================================================
@@ -206,6 +208,10 @@ builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 //Advertisement
 builder.Services.AddScoped<IAdvertisementService, AdvertisementService>();
 builder.Services.AddScoped<IAdvertisementRepository,AdvertisementRepository>();
+
+//User
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 // ============================================================
 // 6. CONTROLLERS
