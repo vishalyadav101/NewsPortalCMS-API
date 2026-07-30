@@ -257,7 +257,16 @@ builder.Services.AddSwaggerGen(options =>
 // ============================================================
 // 8. BUILD APPLICATION
 // ============================================================
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularApp", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 // YAHI LINE MISSING THI.
 // Is line ke baad hi 'app' object available hota hai.
 var app = builder.Build();
@@ -308,7 +317,7 @@ app.UseHttpsRedirection();
 // ============================================================
 // 11. AUTHENTICATION
 // ============================================================
-
+app.UseCors("AllowAngularApp");
 // Request me JWT token hai to user ko authenticate karega.
 //
 // IMPORTANT:
