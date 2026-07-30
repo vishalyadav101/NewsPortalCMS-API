@@ -4,9 +4,9 @@
 
 // JWT Authentication ke liye
 // JWT secret key ko bytes me convert karne ke liye
-using AutoMapper;
-using NewsPortalCMS.Application.Mappings;
 using System.Text;
+using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 // ASP.NET Core Identity ke liye
 using Microsoft.AspNetCore.Identity;
@@ -20,7 +20,9 @@ using Microsoft.OpenApi.Models;
 using NewsPortalCMS.Application.Interfaces;
 using NewsPortalCMS.Application.Interfaces.Repositories;
 using NewsPortalCMS.Application.Interfaces.Services;
+using NewsPortalCMS.Application.Mappings;
 using NewsPortalCMS.Application.Services;
+using NewsPortalCMS.Application.Validators;
 // Domain layer
 using NewsPortalCMS.Domain.Entities;
 // Infrastructure layer
@@ -41,6 +43,9 @@ using NewsPortalCMS.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+builder.Services.AddAutoMapper(typeof(MenuProfile).Assembly);
+
+builder.Services.AddValidatorsFromAssemblyContaining<CreateMenuValidator>();
 
 
 // ============================================================
@@ -173,10 +178,13 @@ builder.Services.AddScoped<ITagService, TagService>();
 builder.Services.AddScoped<INewsTagRepository, NewsTagRepository>();
 builder.Services.AddScoped<INewsTagService, NewsTagService>();
 
+//Menu
+builder.Services.AddScoped<IMenuRepository, MenuRepository>();
+builder.Services.AddScoped<IMenuService,MenuService>();
 
-
-
-
+//MenuItem
+builder.Services.AddScoped<IMenuItemRepository, MenuItemRepository>();
+builder.Services.AddScoped<IMenuItemService, MenuItemService>();
 
 
 // News Services
