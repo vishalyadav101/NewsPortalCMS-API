@@ -46,5 +46,6 @@ namespace NewsPortalCMS.Entities
 
         public DateTime? UpdatedAt { get; set; }
         public ICollection<NewsTag> NewsTags { get; set; } = new List<NewsTag>();
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }
 }

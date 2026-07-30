@@ -38,6 +38,8 @@ public class ApplicationDbContext
 
     public DbSet<MenuItem> MenuItems { get; set; }
 
+    public DbSet<Comment> Comments { get; set; }
+    public DbSet<Advertisement> Advertisements { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -57,6 +59,8 @@ public class ApplicationDbContext
             .WithMany(mi => mi.Children)
             .HasForeignKey(mi => mi.ParentId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
         // Infrastructure project ki saari IEntityTypeConfiguration
         // classes automatically apply hongi.
