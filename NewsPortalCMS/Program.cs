@@ -198,6 +198,15 @@ builder.Services.AddScoped<IMediaService, MediaService>();
 //Static Page
 builder.Services.AddScoped<IStaticPageService, StaticPageService>();
 builder.Services.AddScoped<IStaticPageRepository, StaticPageRepository>();
+
+//Comment
+builder.Services.AddScoped<ICommentService, CommentService>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+
+//Advertisement
+builder.Services.AddScoped<IAdvertisementService, AdvertisementService>();
+builder.Services.AddScoped<IAdvertisementRepository,AdvertisementRepository>();
+
 // ============================================================
 // 6. CONTROLLERS
 // ============================================================
