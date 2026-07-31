@@ -37,7 +37,10 @@ public class SubCategoryController : ControllerBase
 
         if (subCategory == null)
         {
-            return NotFound("SubCategory not found.");
+            return NotFound(new
+            {
+                message = "SubCategory not found."
+            });
         }
 
         return Ok(subCategory);
@@ -56,11 +59,15 @@ public class SubCategoryController : ControllerBase
             return CreatedAtAction(
                 nameof(GetById),
                 new { id = subCategory.Id },
-                subCategory);
+                subCategory
+            );
         }
         catch (InvalidOperationException ex)
         {
-            return BadRequest(ex.Message);
+            return BadRequest(new
+            {
+                message = ex.Message
+            });
         }
     }
 
@@ -77,14 +84,23 @@ public class SubCategoryController : ControllerBase
 
             if (!result)
             {
-                return NotFound("SubCategory not found.");
+                return NotFound(new
+                {
+                    message = "SubCategory not found."
+                });
             }
 
-            return Ok("SubCategory updated successfully.");
+            return Ok(new
+            {
+                message = "SubCategory updated successfully."
+            });
         }
         catch (InvalidOperationException ex)
         {
-            return BadRequest(ex.Message);
+            return BadRequest(new
+            {
+                message = ex.Message
+            });
         }
     }
 
@@ -97,9 +113,15 @@ public class SubCategoryController : ControllerBase
 
         if (!result)
         {
-            return NotFound("SubCategory not found.");
+            return NotFound(new
+            {
+                message = "SubCategory not found."
+            });
         }
 
-        return Ok("SubCategory deleted successfully.");
+        return Ok(new
+        {
+            message = "SubCategory deleted successfully."
+        });
     }
 }
