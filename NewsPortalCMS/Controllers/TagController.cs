@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NewsPortalCMS.Application.DTOs.Tag;
 using NewsPortalCMS.Application.Interfaces;
@@ -34,7 +35,10 @@ public class TagController : ControllerBase
 
         if (tag == null)
         {
-            return NotFound("Tag not found.");
+            return NotFound(new
+            {
+                message = "Tag not found."
+            });
         }
 
         return Ok(tag);
@@ -52,11 +56,15 @@ public class TagController : ControllerBase
             return CreatedAtAction(
                 nameof(GetById),
                 new { id = tag.Id },
-                tag);
+                tag
+            );
         }
         catch (InvalidOperationException ex)
         {
-            return BadRequest(ex.Message);
+            return BadRequest(new
+            {
+                message = ex.Message
+            });
         }
     }
 
@@ -73,14 +81,23 @@ public class TagController : ControllerBase
 
             if (!result)
             {
-                return NotFound("Tag not found.");
+                return NotFound(new
+                {
+                    message = "Tag not found."
+                });
             }
 
-            return Ok("Tag updated successfully.");
+            return Ok(new
+            {
+                message = "Tag updated successfully."
+            });
         }
         catch (InvalidOperationException ex)
         {
-            return BadRequest(ex.Message);
+            return BadRequest(new
+            {
+                message = ex.Message
+            });
         }
     }
 
@@ -92,9 +109,15 @@ public class TagController : ControllerBase
 
         if (!result)
         {
-            return NotFound("Tag not found.");
+            return NotFound(new
+            {
+                message = "Tag not found."
+            });
         }
 
-        return Ok("Tag deleted successfully.");
+        return Ok(new
+        {
+            message = "Tag deleted successfully."
+        });
     }
 }

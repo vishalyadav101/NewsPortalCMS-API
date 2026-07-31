@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using NewsPortalCMS.DTOs.News;
 using NewsPortalCMS.Services.Interfaces;
 
@@ -6,6 +7,7 @@ namespace NewsPortalCMS.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class NewsController : ControllerBase
     {
         private readonly INewsService _newsService;
@@ -25,13 +27,18 @@ namespace NewsPortalCMS.Controllers
         }
 
         // GET: api/News/5
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
             var news = await _newsService.GetByIdAsync(id);
 
             if (news == null)
-                return NotFound(new { message = "News not found." });
+            {
+                return NotFound(new
+                {
+                    message = "News not found."
+                });
+            }
 
             return Ok(news);
         }
@@ -41,42 +48,62 @@ namespace NewsPortalCMS.Controllers
         public async Task<IActionResult> Create(CreateNewsDto dto)
         {
             if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
+            }
 
-            var createdNews = await _newsService.CreateAsync(dto);
+            var createdNews =
+                await _newsService.CreateAsync(dto);
 
             return CreatedAtAction(
                 nameof(GetById),
                 new { id = createdNews.Id },
-                createdNews);
+                createdNews
+            );
         }
 
         // PUT: api/News/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, UpdateNewsDto dto)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update(
+            int id,
+            UpdateNewsDto dto)
         {
-            if (id != dto.Id)
-                return BadRequest(new { message = "Id mismatch." });
-
             if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
+            }
 
-            var updatedNews = await _newsService.UpdateAsync(dto);
+            // Route ki id ko DTO me set 
+            dto.Id = id;
+
+            var updatedNews =
+                await _newsService.UpdateAsync(dto);
 
             if (updatedNews == null)
-                return NotFound(new { message = "News not found." });
+            {
+                return NotFound(new
+                {
+                    message = "News not found."
+                });
+            }
 
             return Ok(updatedNews);
         }
 
         // DELETE: api/News/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var deleted = await _newsService.DeleteAsync(id);
+            var deleted =
+                await _newsService.DeleteAsync(id);
 
             if (!deleted)
-                return NotFound(new { message = "News not found." });
+            {
+                return NotFound(new
+                {
+                    message = "News not found."
+                });
+            }
 
             return Ok(new
             {
