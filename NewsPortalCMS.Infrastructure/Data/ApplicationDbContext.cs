@@ -46,6 +46,7 @@ public class ApplicationDbContext
     public DbSet<Seo> Seos { get; set; }
     public DbSet<WebsiteSetting> WebsiteSettings { get; set; }
 
+    public DbSet<Notification> Notifications { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
