@@ -227,6 +227,10 @@ builder.Services.AddScoped<IRolePermissionService, RolePermissionService>();
 // Dashboard
 builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
+
+// SEO
+builder.Services.AddScoped<ISeoRepository, SeoRepository>();
+builder.Services.AddScoped<ISeoService, SeoService>();
 // ============================================================
 // 6. CONTROLLERS
 // ============================================================
