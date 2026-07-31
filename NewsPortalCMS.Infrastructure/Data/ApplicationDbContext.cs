@@ -43,6 +43,7 @@ public class ApplicationDbContext
     public DbSet<Permission> Permissions { get; set; }
 
     public DbSet<RolePermission> RolePermissions { get; set; }
+    public DbSet<Seo> Seos { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
