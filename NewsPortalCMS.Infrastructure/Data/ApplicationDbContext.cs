@@ -40,6 +40,9 @@ public class ApplicationDbContext
 
     public DbSet<Comment> Comments { get; set; }
     public DbSet<Advertisement> Advertisements { get; set; }
+    public DbSet<Permission> Permissions { get; set; }
+
+    public DbSet<RolePermission> RolePermissions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

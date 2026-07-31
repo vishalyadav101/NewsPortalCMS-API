@@ -34,7 +34,10 @@ public class CategoryController : ControllerBase
 
         if (category == null)
         {
-            return NotFound("Category not found.");
+            return NotFound(new
+            {
+                message = "Category not found."
+            });
         }
 
         return Ok(category);
@@ -51,20 +54,23 @@ public class CategoryController : ControllerBase
             return CreatedAtAction(
                 nameof(GetById),
                 new { id = category.Id },
-                category);
+                category
+            );
         }
         catch (InvalidOperationException ex)
         {
-            return BadRequest(ex.Message);
+            return BadRequest(new
+            {
+                message = ex.Message
+            });
         }
     }
 
     // PUT: api/Category/1
-     
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(
-    int id,
-    CategoryUpdateDto model)
+        int id,
+        CategoryUpdateDto model)
     {
         try
         {
@@ -72,14 +78,23 @@ public class CategoryController : ControllerBase
 
             if (!result)
             {
-                return NotFound("Category not found.");
+                return NotFound(new
+                {
+                    message = "Category not found."
+                });
             }
 
-            return Ok("Category updated successfully.");
+            return Ok(new
+            {
+                message = "Category updated successfully."
+            });
         }
         catch (InvalidOperationException ex)
         {
-            return BadRequest(ex.Message);
+            return BadRequest(new
+            {
+                message = ex.Message
+            });
         }
     }
 
@@ -91,9 +106,15 @@ public class CategoryController : ControllerBase
 
         if (!result)
         {
-            return NotFound("Category not found.");
+            return NotFound(new
+            {
+                message = "Category not found."
+            });
         }
 
-        return Ok("Category deleted successfully.");
+        return Ok(new
+        {
+            message = "Category deleted successfully."
+        });
     }
 }
