@@ -235,6 +235,10 @@ builder.Services.AddScoped<ISeoService, SeoService>();
 //WebsiteSetting
 builder.Services.AddScoped<IWebsiteSettingRepository, WebsiteSettingRepository>();
 builder.Services.AddScoped<IWebsiteSettingService, WebsiteSettingService>();
+
+//Notification
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 // ============================================================
 // 6. CONTROLLERS
 // ============================================================
