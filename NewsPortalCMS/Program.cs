@@ -50,6 +50,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateMenuValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 
+
 // ============================================================
 // 2. DATABASE CONFIGURATION
 // ============================================================
@@ -213,6 +214,14 @@ builder.Services.AddScoped<IAdvertisementRepository,AdvertisementRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 
+//Permission
+builder.Services.AddScoped<IPermissionRepository, PermissionRepository>();
+
+builder.Services.AddScoped<IPermissionService, PermissionService>();
+
+//RolePermission
+builder.Services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
+builder.Services.AddScoped<IRolePermissionService, RolePermissionService>();
 // ============================================================
 // 6. CONTROLLERS
 // ============================================================
