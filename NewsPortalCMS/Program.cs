@@ -222,6 +222,11 @@ builder.Services.AddScoped<IPermissionService, PermissionService>();
 //RolePermission
 builder.Services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
 builder.Services.AddScoped<IRolePermissionService, RolePermissionService>();
+
+//Dashboard
+// Dashboard
+builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 // ============================================================
 // 6. CONTROLLERS
 // ============================================================
