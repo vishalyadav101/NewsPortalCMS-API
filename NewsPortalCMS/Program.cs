@@ -239,6 +239,14 @@ builder.Services.AddScoped<IWebsiteSettingService, WebsiteSettingService>();
 //Notification
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
+
+//AuditLog
+builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+builder.Services.AddScoped<IAuditLogService, AuditLogService>();
+
+//Report
+builder.Services.AddScoped<IReportRepository, ReportRepository>();
+builder.Services.AddScoped<IReportService, ReportService>();
 // ============================================================
 // 6. CONTROLLERS
 // ============================================================
