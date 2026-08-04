@@ -271,7 +271,8 @@ builder.Services.AddScoped<IPublicCategoryService, PublicCategoryService>();
 //Public Menu
 builder.Services.AddScoped<IPublicMenuService, PublicMenuService>();
 
-//
+//fileService
+builder.Services.AddScoped<FileService>();
 
 // ============================================================
 // 6. CONTROLLERS
