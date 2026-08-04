@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
-namespace NewsPortalCMS.DTOs.News
+namespace NewsPortalCMS.Models.News
 {
-    public class CreateNewsDto
+    public class CreateNewsRequest
     {
         [Required]
         public string Title { get; set; } = string.Empty;
@@ -15,8 +16,7 @@ namespace NewsPortalCMS.DTOs.News
         [Required]
         public string Content { get; set; } = string.Empty;
 
-        // File path only
-        public string? FeaturedImage { get; set; }
+        public IFormFile? FeaturedImage { get; set; }
 
         public string Author { get; set; } = string.Empty;
 

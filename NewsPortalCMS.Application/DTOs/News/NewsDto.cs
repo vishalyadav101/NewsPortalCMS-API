@@ -12,13 +12,16 @@
 
         public string Content { get; set; } = string.Empty;
 
+        // Stores the uploaded file path
         public string? FeaturedImage { get; set; }
 
-        public string? Author { get; set; }
+        public string Author { get; set; } = string.Empty;
 
         public DateTime PublishDate { get; set; }
 
         public bool IsPublished { get; set; }
+
+        public bool IsFeatured { get; set; }
 
         public int ViewCount { get; set; }
 
@@ -29,6 +32,5 @@
         public DateTime CreatedAt { get; set; }
 
         public DateTime? UpdatedAt { get; set; }
-        public bool IsFeatured { get; set; }
     }
 }
