@@ -71,7 +71,7 @@ namespace NewsPortalCMS.Services
             }
 
             // Return relative path for database
-            return Path.Combine("uploads", "news", fileName)
+            return "/" + Path.Combine("uploads", "news", fileName)
                 .Replace("\\", "/");
         }
 

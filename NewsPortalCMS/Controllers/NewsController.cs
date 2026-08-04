@@ -84,16 +84,41 @@ namespace NewsPortalCMS.Controllers
 
         // PUT: api/News/5
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update(int id, UpdateNewsDto dto)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Update(
+     int id,
+     [FromForm] UpdateNewsRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            dto.Id = id;
+            string? imagePath = null;
 
-            var updatedNews = await _newsService.UpdateAsync(dto);
+            if (request.FeaturedImage != null)
+            {
+                imagePath =
+                    await _fileService.UploadNewsImageAsync(request.FeaturedImage);
+            }
+
+            var dto = new UpdateNewsDto
+            {
+                Id = id,
+                Title = request.Title,
+                Slug = request.Slug,
+                ShortDescription = request.ShortDescription,
+                Content = request.Content,
+                FeaturedImage = imagePath,
+                Author = request.Author,
+                PublishDate = request.PublishDate,
+                IsPublished = request.IsPublished,
+                IsFeatured = request.IsFeatured,
+                CategoryId = request.CategoryId
+            };
+
+            var updatedNews =
+                await _newsService.UpdateAsync(dto);
 
             if (updatedNews == null)
             {
