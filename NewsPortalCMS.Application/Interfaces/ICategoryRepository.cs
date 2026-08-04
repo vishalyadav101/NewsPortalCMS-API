@@ -17,4 +17,7 @@ public interface ICategoryRepository
     Task<bool> SlugExistsAsync(string slug);
 
     Task<bool> SlugExistsAsync(string slug, int excludeCategoryId);
+    Task<List<Category>> GetActiveCategoriesAsync();
+
+    Task<Category?> GetBySlugAsync(string slug);
 }

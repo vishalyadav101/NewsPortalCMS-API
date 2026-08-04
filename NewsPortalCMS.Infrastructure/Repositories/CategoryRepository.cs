@@ -75,4 +75,22 @@ public class CategoryRepository : ICategoryRepository
                 x.Slug == slug &&
                 x.Id != excludeCategoryId);
     }
+    public async Task<List<Category>> GetActiveCategoriesAsync()
+    {
+        return await _context.Categories
+            .AsNoTracking()
+            .Where(c => c.IsActive)
+            .OrderBy(c => c.DisplayOrder)
+            .ToListAsync();
+    }
+
+    public async Task<Category?> GetBySlugAsync(string slug)
+    {
+        return await _context.Categories
+            .AsNoTracking()
+            .FirstOrDefaultAsync(c =>
+                c.Slug == slug &&
+                c.IsActive);
+    }
+
 }

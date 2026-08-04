@@ -247,6 +247,32 @@ builder.Services.AddScoped<IAuditLogService, AuditLogService>();
 //Report
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IReportService, ReportService>();
+
+//public News
+builder.Services.AddScoped<IPublicNewsRepository, PublicNewsRepository>();
+
+builder.Services.AddScoped<IPublicNewsService, PublicNewsService>();
+
+//public seo
+builder.Services.AddScoped<IPublicSeoRepository, PublicSeoRepository>();
+builder.Services.AddScoped<IPublicSeoService, PublicSeoService>();
+
+//public search
+builder.Services.AddScoped<IPublicSearchRepository, PublicSearchRepository>();
+builder.Services.AddScoped<IPublicSearchService, PublicSearchService>();
+
+//Public StaticPage
+builder.Services.AddScoped<IPublicStaticPageService,PublicStaticPageService>();
+
+
+//public Category
+builder.Services.AddScoped<IPublicCategoryService, PublicCategoryService>();
+
+//Public Menu
+builder.Services.AddScoped<IPublicMenuService, PublicMenuService>();
+
+//
+
 // ============================================================
 // 6. CONTROLLERS
 // ============================================================

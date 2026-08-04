@@ -6,6 +6,8 @@ namespace NewsPortalCMS.Application.Interfaces.Repositories
     {
         Task<IEnumerable<News>> GetLatestNewsAsync(int count);
 
+        Task<IEnumerable<News>> GetFeaturedNewsAsync(int count);
+
         Task<News?> GetNewsBySlugAsync(string slug);
 
         Task<IEnumerable<News>> GetNewsByCategoryAsync(int categoryId);

@@ -6,12 +6,14 @@ namespace NewsPortalCMS.Application.Interfaces.Services
     {
         Task<IEnumerable<PublicNewsDto>> GetLatestNewsAsync(int count);
 
-        Task<PublicNewsDetailsDto?> GetNewsBySlugAsync(string slug);
+        Task<IEnumerable<PublicNewsDto>> GetFeaturedNewsAsync(int count);
+
+        Task<IEnumerable<PublicNewsDto>> GetPopularNewsAsync(int count);
 
         Task<IEnumerable<PublicNewsDto>> GetNewsByCategoryAsync(int categoryId);
 
         Task<IEnumerable<PublicNewsDto>> SearchNewsAsync(string keyword);
 
-        Task<IEnumerable<PublicNewsDto>> GetPopularNewsAsync(int count);
+        Task<PublicNewsDetailsDto?> GetNewsBySlugAsync(string slug);
     }
 }

@@ -64,4 +64,20 @@ public class MenuRepository : IMenuRepository
     {
         return await _context.Menus.AnyAsync(m => m.Name == name);
     }
+    public async Task<Menu?> GetMenuByLocationAsync(string location)
+    {
+        return await _context.Menus
+            .Include(x => x.MenuItems)
+            .FirstOrDefaultAsync(x =>
+                x.Location.ToLower() == location.ToLower()
+                && x.IsActive);
+    }
+    public async Task<List<Menu>> GetActiveMenusAsync()
+    {
+        return await _context.Menus
+            .Include(x => x.MenuItems)
+            .Where(x => x.IsActive)
+            .OrderBy(x => x.Name)
+            .ToListAsync();
+    }
 }

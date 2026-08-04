@@ -22,6 +22,14 @@ namespace NewsPortalCMS.API.Controllers.Public
             return Ok(result);
         }
 
+        [HttpGet("featured")]
+        public async Task<IActionResult> GetFeaturedNews([FromQuery] int count = 10)
+        {
+            var result = await _publicNewsService.GetFeaturedNewsAsync(count);
+
+            return Ok(result);
+        }
+
         [HttpGet("popular")]
         public async Task<IActionResult> GetPopularNews([FromQuery] int count = 10)
         {

@@ -25,6 +25,20 @@ namespace NewsPortalCMS.Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<News>> GetFeaturedNewsAsync(int count)
+        {
+            return await _context.News
+                .AsNoTracking()
+                .Include(n => n.Category)
+                .Where(n =>
+                    n.IsPublished &&
+                    !n.IsDeleted &&
+                    n.IsFeatured)
+                .OrderByDescending(n => n.PublishDate)
+                .Take(count)
+                .ToListAsync();
+        }
+
         public async Task<News?> GetNewsBySlugAsync(string slug)
         {
             return await _context.News
@@ -38,6 +52,7 @@ namespace NewsPortalCMS.Infrastructure.Repositories
                     n.IsPublished &&
                     !n.IsDeleted);
         }
+
         public async Task<IEnumerable<News>> GetNewsByCategoryAsync(int categoryId)
         {
             return await _context.News

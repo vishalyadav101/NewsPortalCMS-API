@@ -17,4 +17,6 @@ public interface IMenuRepository
     Task<bool> ExistsAsync(int id);
 
     Task<bool> NameExistsAsync(string name);
+    Task<List<Menu>> GetActiveMenusAsync();
+    Task<Menu?> GetMenuByLocationAsync(string location);
 }
