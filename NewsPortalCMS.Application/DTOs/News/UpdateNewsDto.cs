@@ -31,5 +31,6 @@ namespace NewsPortalCMS.DTOs.News
         public bool IsPublished { get; set; }
 
         public int CategoryId { get; set; }
+        public bool IsFeatured { get; set; }
     }
 }

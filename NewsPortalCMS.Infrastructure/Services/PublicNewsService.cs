@@ -25,6 +25,13 @@ namespace NewsPortalCMS.Application.Services
             return _mapper.Map<IEnumerable<PublicNewsDto>>(news);
         }
 
+        public async Task<IEnumerable<PublicNewsDto>> GetFeaturedNewsAsync(int count)
+        {
+            var news = await _repository.GetFeaturedNewsAsync(count);
+
+            return _mapper.Map<IEnumerable<PublicNewsDto>>(news);
+        }
+
         public async Task<IEnumerable<PublicNewsDto>> GetPopularNewsAsync(int count)
         {
             var news = await _repository.GetPopularNewsAsync(count);

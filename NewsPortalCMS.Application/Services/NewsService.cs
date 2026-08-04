@@ -29,6 +29,7 @@ namespace NewsPortalCMS.Services
                 Author = n.Author,
                 PublishDate = n.PublishDate,
                 IsPublished = n.IsPublished,
+                IsFeatured = n.IsFeatured,
                 ViewCount = n.ViewCount,
                 CategoryId = n.CategoryId,
                 CategoryName = n.Category?.Name ?? string.Empty,
@@ -55,6 +56,7 @@ namespace NewsPortalCMS.Services
                 Author = news.Author,
                 PublishDate = news.PublishDate,
                 IsPublished = news.IsPublished,
+                IsFeatured= news.IsFeatured,
                 ViewCount = news.ViewCount,
                 CategoryId = news.CategoryId,
                 CategoryName = news.Category?.Name ?? string.Empty,
@@ -75,6 +77,7 @@ namespace NewsPortalCMS.Services
                 Author = dto.Author,
                 PublishDate = dto.PublishDate,
                 IsPublished = dto.IsPublished,
+                IsFeatured = dto.IsFeatured,
                 CategoryId = dto.CategoryId,
                 ViewCount = 0,
                 CreatedAt = DateTime.UtcNow
@@ -93,6 +96,7 @@ namespace NewsPortalCMS.Services
                 Author = createdNews.Author,
                 PublishDate = createdNews.PublishDate,
                 IsPublished = createdNews.IsPublished,
+                IsFeatured=createdNews.IsFeatured,
                 ViewCount = createdNews.ViewCount,
                 CategoryId = createdNews.CategoryId,
                 CreatedAt = createdNews.CreatedAt
@@ -112,9 +116,9 @@ namespace NewsPortalCMS.Services
                 Author = dto.Author,
                 PublishDate = dto.PublishDate,
                 IsPublished = dto.IsPublished,
+                IsFeatured = dto.IsFeatured,
                 CategoryId = dto.CategoryId
             };
-
             var updatedNews = await _newsRepository.UpdateAsync(news);
 
             if (updatedNews == null)
@@ -133,6 +137,7 @@ namespace NewsPortalCMS.Services
                 IsPublished = updatedNews.IsPublished,
                 ViewCount = updatedNews.ViewCount,
                 CategoryId = updatedNews.CategoryId,
+                IsFeatured=updatedNews.IsFeatured,
                 CategoryName = updatedNews.Category?.Name ?? string.Empty,
                 CreatedAt = updatedNews.CreatedAt,
                 UpdatedAt = updatedNews.UpdatedAt

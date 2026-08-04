@@ -17,4 +17,6 @@ public interface IStaticPageRepository
     Task DeleteAsync(StaticPage staticPage);
 
     Task<bool> ExistsAsync(int id);
+    Task<List<StaticPage>> GetActivePagesAsync();
+    Task<StaticPage?> GetActiveBySlugAsync(string slug);
 }

@@ -64,4 +64,17 @@ public class StaticPageRepository : IStaticPageRepository
         return await _context.StaticPages
             .AnyAsync(x => x.Id == id);
     }
+    public async Task<List<StaticPage>> GetActivePagesAsync()
+    {
+        return await _context.StaticPages
+            .Where(x => x.Status)
+            .ToListAsync();
+    }
+    public async Task<StaticPage?> GetActiveBySlugAsync(string slug)
+    {
+        return await _context.StaticPages
+            .FirstOrDefaultAsync(x =>
+                x.Slug == slug &&
+                x.Status);
+    }
 }
