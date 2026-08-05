@@ -48,5 +48,6 @@ namespace NewsPortalCMS.Entities
         public ICollection<NewsTag> NewsTags { get; set; } = new List<NewsTag>();
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
         public bool IsFeatured { get; set; } = false;
+        public string? FeaturedVideo { get; set; }
     }
 }

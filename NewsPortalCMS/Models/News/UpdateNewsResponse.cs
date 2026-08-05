@@ -19,6 +19,7 @@ public class UpdateNewsRequest
 
     public IFormFile? FeaturedImage { get; set; }
 
+    public IFormFile? FeaturedVideo { get; set; }
     public string? Author { get; set; }
 
     public DateTime PublishDate { get; set; }

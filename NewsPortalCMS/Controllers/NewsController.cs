@@ -63,7 +63,11 @@ namespace NewsPortalCMS.Controllers
                 return BadRequest(ModelState);
             }
 
-            string? imagePath = await _fileService.UploadNewsImageAsync(request.FeaturedImage);
+            string? imagePath =
+    await _fileService.UploadNewsImageAsync(request.FeaturedImage);
+
+string? videoPath =
+    await _fileService.UploadNewsVideoAsync(request.FeaturedVideo);
 
             // Save image in Media Library
             if (request.FeaturedImage != null && !string.IsNullOrEmpty(imagePath))
@@ -83,6 +87,24 @@ namespace NewsPortalCMS.Controllers
 
                 await _mediaRepository.AddAsync(media);
             }
+            // Save video in Media Library
+            if (request.FeaturedVideo != null && !string.IsNullOrEmpty(videoPath))
+            {
+                var media = new Media
+                {
+                    FileName = Path.GetFileName(videoPath),
+                    OriginalFileName = request.FeaturedVideo.FileName,
+                    FilePath = videoPath,
+                    FileType = Path.GetExtension(request.FeaturedVideo.FileName),
+                    ContentType = request.FeaturedVideo.ContentType,
+                    FileSize = request.FeaturedVideo.Length,
+                    UploadedBy = User.Identity?.Name ?? "Admin",
+                    UploadedDate = DateTime.UtcNow,
+                    IsActive = true
+                };
+
+                await _mediaRepository.AddAsync(media);
+            }
 
             var dto = new CreateNewsDto
             {
@@ -91,6 +113,7 @@ namespace NewsPortalCMS.Controllers
                 ShortDescription = request.ShortDescription,
                 Content = request.Content,
                 FeaturedImage = imagePath,
+                FeaturedVideo = videoPath,
                 Author = request.Author,
                 PublishDate = request.PublishDate,
                 IsPublished = request.IsPublished,
@@ -107,9 +130,11 @@ namespace NewsPortalCMS.Controllers
         // PUT: api/News/5
         [HttpPut("{id:int}")]
         [Consumes("multipart/form-data")]
+        // PUT: api/News/5
+       
         public async Task<IActionResult> Update(
-            int id,
-            [FromForm] UpdateNewsRequest request)
+    int id,
+    [FromForm] UpdateNewsRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -117,13 +142,13 @@ namespace NewsPortalCMS.Controllers
             }
 
             string? imagePath = null;
+            string? videoPath = null;
 
+            // Upload Image
             if (request.FeaturedImage != null)
             {
-                // Upload image
                 imagePath = await _fileService.UploadNewsImageAsync(request.FeaturedImage);
 
-                // Save image in Media Library
                 if (!string.IsNullOrEmpty(imagePath))
                 {
                     var media = new Media
@@ -143,6 +168,30 @@ namespace NewsPortalCMS.Controllers
                 }
             }
 
+            // Upload Video
+            if (request.FeaturedVideo != null)
+            {
+                videoPath = await _fileService.UploadNewsVideoAsync(request.FeaturedVideo);
+
+                if (!string.IsNullOrEmpty(videoPath))
+                {
+                    var media = new Media
+                    {
+                        FileName = Path.GetFileName(videoPath),
+                        OriginalFileName = request.FeaturedVideo.FileName,
+                        FilePath = videoPath,
+                        FileType = Path.GetExtension(request.FeaturedVideo.FileName),
+                        ContentType = request.FeaturedVideo.ContentType,
+                        FileSize = request.FeaturedVideo.Length,
+                        UploadedBy = User.Identity?.Name ?? "Admin",
+                        UploadedDate = DateTime.UtcNow,
+                        IsActive = true
+                    };
+
+                    await _mediaRepository.AddAsync(media);
+                }
+            }
+
             var dto = new UpdateNewsDto
             {
                 Id = id,
@@ -150,10 +199,8 @@ namespace NewsPortalCMS.Controllers
                 Slug = request.Slug,
                 ShortDescription = request.ShortDescription,
                 Content = request.Content,
-
-                // If no new image is uploaded, NewsService should keep the old image.
                 FeaturedImage = imagePath,
-
+                FeaturedVideo = videoPath,
                 Author = request.Author,
                 PublishDate = request.PublishDate,
                 IsPublished = request.IsPublished,

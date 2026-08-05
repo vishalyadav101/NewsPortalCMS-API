@@ -26,6 +26,7 @@ namespace NewsPortalCMS.Services
                 ShortDescription = n.ShortDescription,
                 Content = n.Content,
                 FeaturedImage = n.FeaturedImage,
+                FeaturedVideo = n.FeaturedVideo,
                 Author = n.Author,
                 PublishDate = n.PublishDate,
                 IsPublished = n.IsPublished,
@@ -53,6 +54,7 @@ namespace NewsPortalCMS.Services
                 ShortDescription = news.ShortDescription,
                 Content = news.Content,
                 FeaturedImage = news.FeaturedImage,
+                FeaturedVideo=news.FeaturedVideo,
                 Author = news.Author,
                 PublishDate = news.PublishDate,
                 IsPublished = news.IsPublished,
@@ -74,6 +76,7 @@ namespace NewsPortalCMS.Services
                 ShortDescription = dto.ShortDescription,
                 Content = dto.Content,
                 FeaturedImage = dto.FeaturedImage,
+                FeaturedVideo = dto.FeaturedVideo,
                 Author = dto.Author,
                 PublishDate = dto.PublishDate,
                 IsPublished = dto.IsPublished,
@@ -93,6 +96,7 @@ namespace NewsPortalCMS.Services
                 ShortDescription = createdNews.ShortDescription,
                 Content = createdNews.Content,
                 FeaturedImage = createdNews.FeaturedImage,
+                FeaturedVideo= createdNews.FeaturedVideo,
                 Author = createdNews.Author,
                 PublishDate = createdNews.PublishDate,
                 IsPublished = createdNews.IsPublished,
@@ -113,10 +117,12 @@ namespace NewsPortalCMS.Services
                 ShortDescription = dto.ShortDescription,
                 Content = dto.Content,
                 FeaturedImage = dto.FeaturedImage,
+
                 Author = dto.Author,
                 PublishDate = dto.PublishDate,
                 IsPublished = dto.IsPublished,
                 IsFeatured = dto.IsFeatured,
+                FeaturedVideo = dto.FeaturedVideo,
                 CategoryId = dto.CategoryId
             };
             var updatedNews = await _newsRepository.UpdateAsync(news);
@@ -138,6 +144,7 @@ namespace NewsPortalCMS.Services
                 ViewCount = updatedNews.ViewCount,
                 CategoryId = updatedNews.CategoryId,
                 IsFeatured=updatedNews.IsFeatured,
+                FeaturedVideo=updatedNews.FeaturedVideo,
                 CategoryName = updatedNews.Category?.Name ?? string.Empty,
                 CreatedAt = updatedNews.CreatedAt,
                 UpdatedAt = updatedNews.UpdatedAt

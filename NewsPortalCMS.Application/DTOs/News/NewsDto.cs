@@ -14,6 +14,7 @@
 
         // Stores the uploaded file path
         public string? FeaturedImage { get; set; }
+        public string? FeaturedVideo { get; set; }
 
         public string Author { get; set; } = string.Empty;
 
