@@ -17,6 +17,7 @@ namespace NewsPortalCMS.Models.News
         public string Content { get; set; } = string.Empty;
 
         public IFormFile? FeaturedImage { get; set; }
+        public IFormFile? FeaturedVideo { get; set; }
 
         public string Author { get; set; } = string.Empty;
 
