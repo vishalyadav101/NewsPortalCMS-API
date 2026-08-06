@@ -29,7 +29,10 @@ namespace NewsPortalCMS.Controllers
         }
 
         // GET: api/News
+        
         [HttpGet]
+        [RequestSizeLimit(1610612736)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 1610612736)]
         public async Task<IActionResult> GetAll()
         {
             var news = await _newsService.GetAllAsync();
@@ -37,7 +40,10 @@ namespace NewsPortalCMS.Controllers
         }
 
         // GET: api/News/5
+        
         [HttpGet("{id:int}")]
+        [RequestSizeLimit(1610612736)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 1610612736)]
         public async Task<IActionResult> GetById(int id)
         {
             var news = await _newsService.GetByIdAsync(id);
@@ -55,6 +61,8 @@ namespace NewsPortalCMS.Controllers
 
         // POST: api/News
         [HttpPost]
+        [RequestSizeLimit(1610612736)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 1610612736)]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Create([FromForm] CreateNewsRequest request)
         {
@@ -129,6 +137,8 @@ string? videoPath =
         // PUT: api/News/5
         // PUT: api/News/5
         [HttpPut("{id:int}")]
+        [RequestSizeLimit(1610612736)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 1610612736)]
         [Consumes("multipart/form-data")]
         // PUT: api/News/5
        
@@ -221,7 +231,10 @@ string? videoPath =
             return Ok(updatedNews);
         }
         // DELETE: api/News/5
+        
         [HttpDelete("{id:int}")]
+        [RequestSizeLimit(1610612736)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 1610612736)]
         public async Task<IActionResult> Delete(int id)
         {
             var deleted = await _newsService.DeleteAsync(id);
