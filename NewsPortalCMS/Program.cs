@@ -8,6 +8,10 @@ using System.Text;
 using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Features;
+
+
+
 // ASP.NET Core Identity ke liye
 using Microsoft.AspNetCore.Identity;
 // Entity Framework Core ke liye
@@ -342,6 +346,21 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
+});
+
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.Limits.MaxRequestBodySize = 1610612736; // 1.5 GB
+});
+
+builder.Services.Configure<IISServerOptions>(options =>
+{
+    options.MaxRequestBodySize = 1610612736; // 1.5 GB
+});
+
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 1610612736; // 1.5 GB
 });
 // YAHI LINE MISSING THI.
 // Is line ke baad hi 'app' object available hota hai.

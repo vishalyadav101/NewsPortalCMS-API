@@ -37,7 +37,7 @@ namespace NewsPortalCMS.Services
             }
 
             // Maximum file size (10 MB)
-            if (file.Length > 10 * 1024 * 1024)
+            if (file.Length > 1536L * 1024 * 1024)
             {
                 throw new Exception("File size cannot exceed 10 MB.");
             }
@@ -99,7 +99,7 @@ namespace NewsPortalCMS.Services
             }
 
             // Maximum file size (100 MB)
-            if (file.Length > 100 * 1024 * 1024)
+            if (file.Length > 1536L * 1024 * 1024)
             {
                 throw new Exception("Video size cannot exceed 100 MB.");
             }
