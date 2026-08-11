@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 
 namespace NewsPortalCMS.Application.DTOs.Advertisement
 {
@@ -8,8 +9,7 @@ namespace NewsPortalCMS.Application.DTOs.Advertisement
 
         public string? Description { get; set; }
 
-        // Existing Media Library reference
-        public int MediaId { get; set; }
+        public IFormFile BannerFile { get; set; } = null!;
 
         public string? RedirectUrl { get; set; }
 
