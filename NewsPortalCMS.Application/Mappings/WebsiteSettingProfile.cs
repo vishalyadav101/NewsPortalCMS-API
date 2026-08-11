@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using NewsPortalCMS.Application.DTOs.PublicWebsiteSetting;
 using NewsPortalCMS.Application.DTOs.WebsiteSetting;
 using NewsPortalCMS.Domain.Entities;
 
@@ -13,5 +14,6 @@ public class WebsiteSettingProfile : Profile
         CreateMap<WebsiteSettingUpdateDto, WebsiteSetting>();
 
         CreateMap<WebsiteSetting, WebsiteSettingResponseDto>();
+        CreateMap<WebsiteSetting, PublicWebsiteSettingResponseDto>();
     }
 }
