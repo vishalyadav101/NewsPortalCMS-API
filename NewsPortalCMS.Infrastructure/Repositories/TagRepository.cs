@@ -73,4 +73,13 @@ public class TagRepository : ITagRepository
                 x.Slug == slug &&
                 x.Id != excludeTagId);
     }
+    // Slug se tag
+    public async Task<Tag?> GetBySlugAsync(string slug)
+    {
+        return await _context.Tags
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x =>
+                x.Slug == slug &&
+                x.IsActive);
+    }
 }

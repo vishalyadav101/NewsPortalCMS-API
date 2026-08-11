@@ -278,6 +278,14 @@ builder.Services.AddScoped<IPublicMenuService, PublicMenuService>();
 //fileService
 builder.Services.AddScoped<FileService>();
 
+//public tag
+
+builder.Services.AddScoped<IPublicTagService, PublicTagService>();
+
+//public websitesetting
+builder.Services.AddScoped<
+    IPublicWebsiteSettingService,
+    PublicWebsiteSettingService>();
 // ============================================================
 // 6. CONTROLLERS
 // ============================================================
