@@ -8,10 +8,7 @@ namespace NewsPortalCMS.Application.MappingProfiles
     {
         public AdvertisementProfile()
         {
-            CreateMap<CreateAdvertisementDto, Advertisement>();
-
-            CreateMap<UpdateAdvertisementDto, Advertisement>();
-
+            // Entity -> Response
             CreateMap<Advertisement, AdvertisementResponseDto>();
         }
     }

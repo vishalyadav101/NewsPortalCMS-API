@@ -17,13 +17,11 @@ namespace NewsPortalCMS.Infrastructure.Repositories
             _context = context;
         }
 
-
         public async Task AddAsync(Advertisement advertisement)
         {
             await _context.Advertisements.AddAsync(advertisement);
             await _context.SaveChangesAsync();
         }
-
 
         public async Task DeleteAsync(Advertisement advertisement)
         {
@@ -31,22 +29,17 @@ namespace NewsPortalCMS.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-
         public async Task<IEnumerable<Advertisement>> GetAllAsync()
         {
             return await _context.Advertisements
-                .Include(x => x.Media)
                 .ToListAsync();
         }
-
 
         public async Task<Advertisement?> GetByIdAsync(Guid id)
         {
             return await _context.Advertisements
-                .Include(x => x.Media)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
-
 
         public async Task UpdateAsync(Advertisement advertisement)
         {

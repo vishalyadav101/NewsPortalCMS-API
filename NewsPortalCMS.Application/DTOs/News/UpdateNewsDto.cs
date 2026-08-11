@@ -18,7 +18,7 @@ namespace NewsPortalCMS.DTOs.News
         public string Content { get; set; } = string.Empty;
 
         // File path only
-        public string FeaturedImage { get; set; }
+        public string? FeaturedImage { get; set; }
         public string? FeaturedVideo { get; set; }
 
         public string Author { get; set; } = string.Empty;

@@ -1,38 +1,52 @@
-﻿using FluentValidation;
-using NewsPortalCMS.Application.DTOs.Advertisement;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using NewsPortalCMS.Domain.Entities;
 
-namespace NewsPortalCMS.Application.Validators.Advertisement
+namespace NewsPortalCMS.Infrastructure.Data.Configurations
 {
-    public class UpdateAdvertisementValidator : AbstractValidator<UpdateAdvertisementDto>
+    public class AdvertisementConfiguration : IEntityTypeConfiguration<Advertisement>
     {
-        public UpdateAdvertisementValidator()
+        public void Configure(EntityTypeBuilder<Advertisement> builder)
         {
-            RuleFor(x => x.Title)
-                .NotEmpty()
-                .WithMessage("Advertisement title is required.")
-                .MaximumLength(200)
-                .WithMessage("Title cannot exceed 200 characters.");
+            builder.ToTable("Advertisements");
 
-            RuleFor(x => x.MediaId)
-                .NotEmpty()
-                .WithMessage("Media is required.");
+            builder.HasKey(x => x.Id);
 
-            RuleFor(x => x.StartDate)
-                .NotEmpty()
-                .WithMessage("Start date is required.");
+            builder.Property(x => x.Title)
+                .IsRequired()
+                .HasMaxLength(200);
 
-            RuleFor(x => x.EndDate)
-                .NotEmpty()
-                .WithMessage("End date is required.");
+            builder.Property(x => x.Description)
+                .HasMaxLength(500);
 
-            RuleFor(x => x)
-                .Must(x => x.EndDate >= x.StartDate)
-                .WithMessage("End date must be greater than or equal to start date.");
+            builder.Property(x => x.BannerUrl)
+                .IsRequired()
+                .HasMaxLength(500);
 
-            RuleFor(x => x.RedirectUrl)
-                .MaximumLength(500)
-                .When(x => !string.IsNullOrEmpty(x.RedirectUrl))
-                .WithMessage("Redirect URL cannot exceed 500 characters.");
+            builder.Property(x => x.RedirectUrl)
+                .HasMaxLength(500);
+
+            builder.Property(x => x.Position)
+                .HasConversion<int>()
+                .IsRequired();
+
+            builder.Property(x => x.StartDate)
+                .IsRequired();
+
+            builder.Property(x => x.EndDate)
+                .IsRequired();
+
+            builder.Property(x => x.IsActive)
+                .IsRequired();
+
+            builder.Property(x => x.DisplayOrder)
+                .IsRequired();
+
+            builder.Property(x => x.CreatedDate)
+                .IsRequired();
+
+            builder.Property(x => x.UpdatedDate)
+                .IsRequired(false);
         }
     }
 }
