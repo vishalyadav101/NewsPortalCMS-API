@@ -19,6 +19,10 @@ namespace NewsPortalCMS.Infrastructure.Data.Configurations
             builder.Property(x => x.Description)
                 .HasMaxLength(500);
 
+            builder.Property(x => x.BannerUrl)
+                .IsRequired()
+                .HasMaxLength(500);
+
             builder.Property(x => x.RedirectUrl)
                 .HasMaxLength(500);
 
@@ -41,12 +45,8 @@ namespace NewsPortalCMS.Infrastructure.Data.Configurations
             builder.Property(x => x.CreatedDate)
                 .IsRequired();
 
-
-            // Advertisement - Media Relationship
-            builder.HasOne(x => x.Media)
-                .WithMany()
-                .HasForeignKey(x => x.MediaId)
-                .OnDelete(DeleteBehavior.Restrict);
+            builder.Property(x => x.UpdatedDate)
+                .IsRequired(false);
         }
     }
 }

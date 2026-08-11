@@ -10,8 +10,7 @@ namespace NewsPortalCMS.Application.DTOs.Advertisement
 
         public string? Description { get; set; }
 
-        public int MediaId { get; set; }
-        public string? MediaUrl { get; set; }
+        public string BannerUrl { get; set; } = string.Empty;
 
         public string? RedirectUrl { get; set; }
 
