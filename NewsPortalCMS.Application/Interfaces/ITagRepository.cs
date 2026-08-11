@@ -9,6 +9,7 @@ public interface ITagRepository
     Task<Tag?> GetByIdAsync(int id);
 
     Task<Tag> CreateAsync(Tag tag);
+    Task<Tag?> GetBySlugAsync(string slug);
 
     Task UpdateAsync(Tag tag);
 
