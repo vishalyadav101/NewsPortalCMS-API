@@ -11,10 +11,7 @@ namespace NewsPortalCMS.Domain.Entities
 
         public string? Description { get; set; }
 
-        // Reference to Media Library
-        public int MediaId { get; set; }
-
-        public Media? Media { get; set; }
+        public string BannerUrl { get; set; } = string.Empty;
 
         public string? RedirectUrl { get; set; }
 
