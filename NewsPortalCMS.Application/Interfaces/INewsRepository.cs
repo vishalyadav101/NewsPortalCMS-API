@@ -1,5 +1,4 @@
-﻿using NewsPortalCMS.DTOs.News;
-using NewsPortalCMS.Entities;
+﻿using NewsPortalCMS.Entities;
 
 namespace NewsPortalCMS.Interfaces
 {
@@ -14,8 +13,12 @@ namespace NewsPortalCMS.Interfaces
         Task<News?> UpdateAsync(News news);
 
         Task<bool> DeleteAsync(int id);
+
         Task<bool> RestoreAsync(int id);
+
         Task<bool> TitleExistsAsync(string title);
+
+        Task<bool> SlugExistsAsync(string slug);
 
         Task<bool> CategoryExistsAsync(int categoryId);
 

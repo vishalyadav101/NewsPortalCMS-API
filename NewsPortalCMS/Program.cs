@@ -282,6 +282,14 @@ builder.Services.AddScoped<FileService>();
 
 builder.Services.AddScoped<IPublicTagService, PublicTagService>();
 
+//file storage
+builder.Services.AddScoped<IFileStorageService, FileStorageService>();
+
+// File Validation
+builder.Services.AddScoped<
+    IFileValidationService,
+    FileValidationService>();
+
 //public websitesetting
 builder.Services.AddScoped<
     IPublicWebsiteSettingService,
