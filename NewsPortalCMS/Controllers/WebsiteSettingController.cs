@@ -12,6 +12,7 @@ public class WebsiteSettingController : ControllerBase
 {
     private readonly IWebsiteSettingService _websiteSettingService;
 
+
     public WebsiteSettingController(
         IWebsiteSettingService websiteSettingService)
     {
@@ -26,6 +27,7 @@ public class WebsiteSettingController : ControllerBase
         var setting =
             await _websiteSettingService.GetAsync();
 
+
         if (setting == null)
         {
             return NotFound(new
@@ -34,8 +36,10 @@ public class WebsiteSettingController : ControllerBase
             });
         }
 
+
         return Ok(setting);
     }
+
 
 
     // GET: api/WebsiteSetting/1
@@ -45,6 +49,7 @@ public class WebsiteSettingController : ControllerBase
         var setting =
             await _websiteSettingService.GetByIdAsync(id);
 
+
         if (setting == null)
         {
             return NotFound(new
@@ -53,8 +58,10 @@ public class WebsiteSettingController : ControllerBase
             });
         }
 
+
         return Ok(setting);
     }
+
 
 
     // POST: api/WebsiteSetting
@@ -66,6 +73,7 @@ public class WebsiteSettingController : ControllerBase
         {
             var result =
                 await _websiteSettingService.CreateAsync(model);
+
 
             return CreatedAtAction(
                 nameof(GetById),
@@ -85,6 +93,7 @@ public class WebsiteSettingController : ControllerBase
     }
 
 
+
     // PUT: api/WebsiteSetting/1
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(
@@ -98,6 +107,7 @@ public class WebsiteSettingController : ControllerBase
                     id,
                     model);
 
+
             if (!result)
             {
                 return NotFound(new
@@ -105,6 +115,7 @@ public class WebsiteSettingController : ControllerBase
                     message = "Website setting not found."
                 });
             }
+
 
             return Ok(new
             {
@@ -121,12 +132,14 @@ public class WebsiteSettingController : ControllerBase
     }
 
 
+
     // DELETE: api/WebsiteSetting/1
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {
         var result =
             await _websiteSettingService.DeleteAsync(id);
+
 
         if (!result)
         {
@@ -136,101 +149,10 @@ public class WebsiteSettingController : ControllerBase
             });
         }
 
+
         return Ok(new
         {
             message = "Website setting deleted successfully."
         });
-    }
-
-
-    // POST: api/WebsiteSetting/1/logo
-    [HttpPost("{id:int}/logo")]
-    [Consumes("multipart/form-data")]
-    public async Task<IActionResult> UploadLogo(
-        int id,
-        IFormFile file)
-    {
-        if (file == null || file.Length == 0)
-        {
-            return BadRequest(new
-            {
-                message = "Logo file is required."
-            });
-        }
-
-        try
-        {
-            var result =
-                await _websiteSettingService.UploadLogoAsync(
-                    id,
-                    file);
-
-            if (result == null)
-            {
-                return NotFound(new
-                {
-                    message = "Website setting not found."
-                });
-            }
-
-            return Ok(new
-            {
-                message = "Logo uploaded successfully.",
-                logoUrl = result
-            });
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new
-            {
-                message = ex.Message
-            });
-        }
-    }
-
-
-    // POST: api/WebsiteSetting/1/favicon
-    [HttpPost("{id:int}/favicon")]
-    [Consumes("multipart/form-data")]
-    public async Task<IActionResult> UploadFavicon(
-        int id,
-        IFormFile file)
-    {
-        if (file == null || file.Length == 0)
-        {
-            return BadRequest(new
-            {
-                message = "Favicon file is required."
-            });
-        }
-
-        try
-        {
-            var result =
-                await _websiteSettingService.UploadFaviconAsync(
-                    id,
-                    file);
-
-            if (result == null)
-            {
-                return NotFound(new
-                {
-                    message = "Website setting not found."
-                });
-            }
-
-            return Ok(new
-            {
-                message = "Favicon uploaded successfully.",
-                faviconUrl = result
-            });
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new
-            {
-                message = ex.Message
-            });
-        }
     }
 }
