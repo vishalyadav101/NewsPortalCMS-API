@@ -1,11 +1,12 @@
 ﻿using NewsPortalCMS.Entities;
+using NewsPortalCMS.DTOs.News;
 
 namespace NewsPortalCMS.Interfaces
 {
     public interface INewsRepository
     {
-        Task<IEnumerable<News>> GetAllAsync();
-
+        Task<(IEnumerable<News> Items, int TotalCount)> GetAllAsync(
+     NewsQueryRequest request);
         Task<News?> GetByIdAsync(int id);
 
         Task<News> CreateAsync(News news);

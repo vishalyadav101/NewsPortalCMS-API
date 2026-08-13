@@ -284,6 +284,7 @@ builder.Services.AddScoped<IPublicTagService, PublicTagService>();
 
 //file storage
 builder.Services.AddScoped<IFileStorageService, FileStorageService>();
+builder.Services.AddSingleton<ICacheService, MemoryCacheService>();
 
 // File Validation
 builder.Services.AddScoped<
@@ -294,12 +295,21 @@ builder.Services.AddScoped<
 builder.Services.AddScoped<
     IPublicWebsiteSettingService,
     PublicWebsiteSettingService>();
+
+//Cache
+builder.Services.AddScoped<ICacheService, MemoryCacheService>();
 // ============================================================
 // 6. CONTROLLERS
 // ============================================================
 
 // API Controllers ko register karta hai.
 builder.Services.AddControllers();
+
+// Response Caching
+builder.Services.AddResponseCaching();
+
+// Application-level memory cache
+builder.Services.AddMemoryCache();
 
 
 // ============================================================
@@ -433,6 +443,10 @@ app.UseCors("AllowAngularApp");
 //
 // IMPORTANT:
 // Authentication hamesha Authorization se pehle aayega.
+
+// Response Caching
+app.UseResponseCaching();
+
 app.UseAuthentication();
 
 

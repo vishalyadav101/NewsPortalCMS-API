@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Caching.Memory;
+using NewsPortalCMS.Application.Common.Caching;
 using NewsPortalCMS.Application.DTOs.Public;
 using NewsPortalCMS.Application.Interfaces.Repositories;
 using NewsPortalCMS.Application.Interfaces.Services;
@@ -9,65 +11,255 @@ namespace NewsPortalCMS.Application.Services
     {
         private readonly IPublicNewsRepository _repository;
         private readonly IMapper _mapper;
+        private readonly IMemoryCache _cache;
+        private readonly ICacheService _cacheService;
 
         public PublicNewsService(
             IPublicNewsRepository repository,
-            IMapper mapper)
+            IMapper mapper,
+            IMemoryCache cache,
+            ICacheService cacheService)
         {
             _repository = repository;
             _mapper = mapper;
+            _cache = cache;
+            _cacheService = cacheService;
         }
 
-        public async Task<IEnumerable<PublicNewsDto>> GetLatestNewsAsync(int count)
-        {
-            var news = await _repository.GetLatestNewsAsync(count);
+        // ============================================================
+        // LATEST NEWS
+        // ============================================================
 
-            return _mapper.Map<IEnumerable<PublicNewsDto>>(news);
+        public async Task<IEnumerable<PublicNewsDto>> GetLatestNewsAsync(
+            int count)
+        {
+            count = NormalizeCount(count);
+
+            var cacheKey =
+                $"{PublicNewsCacheKeys.Latest}_{count}";
+
+            if (_cache.TryGetValue(
+                cacheKey,
+                out IEnumerable<PublicNewsDto>? cachedNews))
+            {
+                return cachedNews!;
+            }
+
+            var news =
+                await _repository.GetLatestNewsAsync(count);
+
+            var result =
+                _mapper.Map<IEnumerable<PublicNewsDto>>(news);
+
+            _cache.Set(
+                cacheKey,
+                result,
+                GetCacheOptions(TimeSpan.FromMinutes(2)));
+
+            _cacheService.TrackKey(cacheKey);
+
+            return result;
         }
 
-        public async Task<IEnumerable<PublicNewsDto>> GetFeaturedNewsAsync(int count)
-        {
-            var news = await _repository.GetFeaturedNewsAsync(count);
+        // ============================================================
+        // FEATURED NEWS
+        // ============================================================
 
-            return _mapper.Map<IEnumerable<PublicNewsDto>>(news);
+        public async Task<IEnumerable<PublicNewsDto>> GetFeaturedNewsAsync(
+            int count)
+        {
+            count = NormalizeCount(count);
+
+            var cacheKey =
+                $"{PublicNewsCacheKeys.Featured}_{count}";
+
+            if (_cache.TryGetValue(
+                cacheKey,
+                out IEnumerable<PublicNewsDto>? cachedNews))
+            {
+                return cachedNews!;
+            }
+
+            var news =
+                await _repository.GetFeaturedNewsAsync(count);
+
+            var result =
+                _mapper.Map<IEnumerable<PublicNewsDto>>(news);
+
+            _cache.Set(
+                cacheKey,
+                result,
+                GetCacheOptions(TimeSpan.FromMinutes(2)));
+
+            _cacheService.TrackKey(cacheKey);
+
+            return result;
         }
 
-        public async Task<IEnumerable<PublicNewsDto>> GetPopularNewsAsync(int count)
-        {
-            var news = await _repository.GetPopularNewsAsync(count);
+        // ============================================================
+        // POPULAR NEWS
+        // ============================================================
 
-            return _mapper.Map<IEnumerable<PublicNewsDto>>(news);
+        public async Task<IEnumerable<PublicNewsDto>> GetPopularNewsAsync(
+            int count)
+        {
+            count = NormalizeCount(count);
+
+            var cacheKey =
+                $"{PublicNewsCacheKeys.Popular}_{count}";
+
+            if (_cache.TryGetValue(
+                cacheKey,
+                out IEnumerable<PublicNewsDto>? cachedNews))
+            {
+                return cachedNews!;
+            }
+
+            var news =
+                await _repository.GetPopularNewsAsync(count);
+
+            var result =
+                _mapper.Map<IEnumerable<PublicNewsDto>>(news);
+
+            _cache.Set(
+                cacheKey,
+                result,
+                GetCacheOptions(TimeSpan.FromMinutes(2)));
+
+            _cacheService.TrackKey(cacheKey);
+
+            return result;
         }
 
-        public async Task<IEnumerable<PublicNewsDto>> GetNewsByCategoryAsync(int categoryId)
-        {
-            var news = await _repository.GetNewsByCategoryAsync(categoryId);
+        // ============================================================
+        // NEWS BY CATEGORY
+        // ============================================================
 
-            return _mapper.Map<IEnumerable<PublicNewsDto>>(news);
+        public async Task<IEnumerable<PublicNewsDto>> GetNewsByCategoryAsync(
+            int categoryId)
+        {
+            var cacheKey =
+                $"{PublicNewsCacheKeys.Category}_{categoryId}";
+
+            if (_cache.TryGetValue(
+                cacheKey,
+                out IEnumerable<PublicNewsDto>? cachedNews))
+            {
+                return cachedNews!;
+            }
+
+            var news =
+                await _repository
+                    .GetNewsByCategoryAsync(categoryId);
+
+            var result =
+                _mapper.Map<IEnumerable<PublicNewsDto>>(news);
+
+            _cache.Set(
+                cacheKey,
+                result,
+                GetCacheOptions(TimeSpan.FromMinutes(2)));
+
+            _cacheService.TrackKey(cacheKey);
+
+            return result;
         }
 
-        public async Task<IEnumerable<PublicNewsDto>> SearchNewsAsync(string keyword)
-        {
-            var news = await _repository.SearchNewsAsync(keyword);
+        // ============================================================
+        // SEARCH NEWS
+        // ============================================================
 
-            return _mapper.Map<IEnumerable<PublicNewsDto>>(news);
+        public async Task<IEnumerable<PublicNewsDto>> SearchNewsAsync(
+            string keyword)
+        {
+            if (string.IsNullOrWhiteSpace(keyword))
+            {
+                return Enumerable.Empty<PublicNewsDto>();
+            }
+
+            var normalizedKeyword =
+                keyword.Trim().ToLowerInvariant();
+
+            var cacheKey =
+                $"{PublicNewsCacheKeys.Search}_{normalizedKeyword}";
+
+            if (_cache.TryGetValue(
+                cacheKey,
+                out IEnumerable<PublicNewsDto>? cachedNews))
+            {
+                return cachedNews!;
+            }
+
+            var news =
+                await _repository
+                    .SearchNewsAsync(normalizedKeyword);
+
+            var result =
+                _mapper.Map<IEnumerable<PublicNewsDto>>(news);
+
+            _cache.Set(
+                cacheKey,
+                result,
+                GetCacheOptions(TimeSpan.FromSeconds(30)));
+
+            _cacheService.TrackKey(cacheKey);
+
+            return result;
         }
 
-        public async Task<PublicNewsDetailsDto?> GetNewsBySlugAsync(string slug)
+        // ============================================================
+        // NEWS DETAILS BY SLUG
+        // ============================================================
+
+        public async Task<PublicNewsDetailsDto?> GetNewsBySlugAsync(
+            string slug)
         {
-            var news = await _repository.GetNewsBySlugAsync(slug);
+            if (string.IsNullOrWhiteSpace(slug))
+            {
+                return null;
+            }
+
+            var normalizedSlug =
+                slug.Trim().ToLowerInvariant();
+
+            var cacheKey =
+                $"{PublicNewsCacheKeys.Slug}_{normalizedSlug}";
+
+            if (_cache.TryGetValue(
+                cacheKey,
+                out PublicNewsDetailsDto? cachedNews))
+            {
+                return cachedNews;
+            }
+
+            var news =
+                await _repository
+                    .GetNewsBySlugAsync(normalizedSlug);
 
             if (news == null)
+            {
                 return null;
+            }
 
-            var dto = _mapper.Map<PublicNewsDetailsDto>(news);
+            var dto =
+                _mapper.Map<PublicNewsDetailsDto>(news);
+
+            // ========================================================
+            // TAGS
+            // ========================================================
 
             dto.Tags = news.NewsTags
                 .Select(nt => nt.Tag.Name)
                 .ToList();
 
+            // ========================================================
+            // APPROVED COMMENTS
+            // ========================================================
+
             dto.Comments = news.Comments
-                .Where(c => c.IsApproved && c.IsActive)
+                .Where(c =>
+                    c.IsApproved &&
+                    c.IsActive)
                 .OrderByDescending(c => c.CreatedDate)
                 .Select(c => new PublicCommentDto
                 {
@@ -78,7 +270,50 @@ namespace NewsPortalCMS.Application.Services
                 })
                 .ToList();
 
+            // ========================================================
+            // CACHE DETAILS
+            // ========================================================
+
+            _cache.Set(
+                cacheKey,
+                dto,
+                GetCacheOptions(TimeSpan.FromMinutes(2)));
+
+            _cacheService.TrackKey(cacheKey);
+
             return dto;
+        }
+
+        // ============================================================
+        // NORMALIZE COUNT
+        // ============================================================
+
+        private static int NormalizeCount(int count)
+        {
+            // Default count
+            if (count <= 0)
+            {
+                return 10;
+            }
+
+            // Maximum count allowed
+            return Math.Min(count, 50);
+        }
+
+        // ============================================================
+        // CACHE OPTIONS
+        // ============================================================
+
+        private static MemoryCacheEntryOptions GetCacheOptions(
+            TimeSpan expiration)
+        {
+            return new MemoryCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = expiration,
+
+                SlidingExpiration =
+                    TimeSpan.FromMinutes(1)
+            };
         }
     }
 }
