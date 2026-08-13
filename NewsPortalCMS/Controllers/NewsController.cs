@@ -36,9 +36,11 @@ namespace NewsPortalCMS.Controllers
         // ============================================================
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        
+        public async Task<IActionResult> GetAll(
+    [FromQuery] NewsQueryRequest request)
         {
-            var news = await _newsService.GetAllAsync();
+            var news = await _newsService.GetAllAsync(request);
 
             return Ok(news);
         }

@@ -1,29 +1,64 @@
-﻿using NewsPortalCMS.Application.Interfaces.Services;
+﻿using NewsPortalCMS.Application.Common.Pagination;
+using NewsPortalCMS.Application.Interfaces.Services;
 using NewsPortalCMS.DTOs.News;
 using NewsPortalCMS.Entities;
 using NewsPortalCMS.Interfaces;
 using NewsPortalCMS.Services.Interfaces;
 
+
 namespace NewsPortalCMS.Services
 {
     public class NewsService : INewsService
     {
+        private readonly ICacheService _cacheService;
         private readonly INewsRepository _newsRepository;
         private readonly IFileStorageService _fileStorageService;
 
         public NewsService(
-            INewsRepository newsRepository,
-            IFileStorageService fileStorageService)
+     INewsRepository newsRepository,
+     IFileStorageService fileStorageService,
+     ICacheService cacheService)
         {
             _newsRepository = newsRepository;
             _fileStorageService = fileStorageService;
+            _cacheService = cacheService;
         }
 
-        public async Task<IEnumerable<NewsDto>> GetAllAsync()
-        {
-            var newsList = await _newsRepository.GetAllAsync();
 
-            return newsList.Select(n => new NewsDto
+        private void ClearPublicNewsCache(
+    int? oldCategoryId = null,
+    int? newCategoryId = null)
+        {
+            // Latest news cache
+            _cacheService.Remove("public_news_latest_10");
+
+            // Featured news cache
+            _cacheService.Remove("public_news_featured_10");
+
+            // Popular news cache
+            _cacheService.Remove("public_news_popular_10");
+
+            // Old category cache
+            if (oldCategoryId.HasValue)
+            {
+                _cacheService.Remove(
+                    $"public_news_category_{oldCategoryId.Value}");
+            }
+
+            // New category cache
+            if (newCategoryId.HasValue)
+            {
+                _cacheService.Remove(
+                    $"public_news_category_{newCategoryId.Value}");
+            }
+        }
+
+        public async Task<PaginatedResponse<NewsDto>> GetAllAsync(
+     NewsQueryRequest request)
+        {
+            var result = await _newsRepository.GetAllAsync(request);
+
+            var newsDtos = result.Items.Select(n => new NewsDto
             {
                 Id = n.Id,
                 Title = n.Title,
@@ -41,9 +76,22 @@ namespace NewsPortalCMS.Services
                 CategoryName = n.Category?.Name ?? string.Empty,
                 CreatedAt = n.CreatedAt,
                 UpdatedAt = n.UpdatedAt
-            });
-        }
+            }).ToList();
 
+            var totalPages = (int)Math.Ceiling(
+                result.TotalCount / (double)request.PageSize);
+
+            return new PaginatedResponse<NewsDto>
+            {
+                Items = newsDtos,
+                PageNumber = request.PageNumber,
+                PageSize = request.PageSize,
+                TotalCount = result.TotalCount,
+                TotalPages = totalPages,
+                HasPreviousPage = request.PageNumber > 1,
+                HasNextPage = request.PageNumber < totalPages
+            };
+        }
         public async Task<NewsDto?> GetByIdAsync(int id)
         {
             var news = await _newsRepository.GetByIdAsync(id);
@@ -94,6 +142,8 @@ namespace NewsPortalCMS.Services
             var createdNews =
                 await _newsRepository.CreateAsync(news);
 
+            ClearPublicNewsCache(createdNews.CategoryId);
+
             return new NewsDto
             {
                 Id = createdNews.Id,
@@ -123,6 +173,7 @@ namespace NewsPortalCMS.Services
 
             if (existingNews == null)
                 return null;
+
 
             // Keep existing image/video if no new file was uploaded
             var imagePath =
@@ -175,6 +226,8 @@ namespace NewsPortalCMS.Services
             if (updatedNews == null)
                 return null;
 
+            ClearPublicNewsCache(updatedNews.CategoryId);
+
             return new NewsDto
             {
                 Id = updatedNews.Id,
@@ -210,6 +263,7 @@ namespace NewsPortalCMS.Services
 
             if (!deleted)
                 return false;
+            ClearPublicNewsCache(news.CategoryId);
 
             // Delete featured image + thumbnail
             if (!string.IsNullOrWhiteSpace(news.FeaturedImage))

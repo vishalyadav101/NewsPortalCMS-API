@@ -15,54 +15,75 @@ namespace NewsPortalCMS.API.Controllers.Public
         }
 
         [HttpGet("latest")]
-        public async Task<IActionResult> GetLatestNews([FromQuery] int count = 10)
+        [ResponseCache(Duration = 60)]
+        public async Task<IActionResult> GetLatestNews(
+            [FromQuery] int count = 10)
         {
-            var result = await _publicNewsService.GetLatestNewsAsync(count);
+            var result =
+                await _publicNewsService.GetLatestNewsAsync(count);
 
             return Ok(result);
         }
 
         [HttpGet("featured")]
-        public async Task<IActionResult> GetFeaturedNews([FromQuery] int count = 10)
+        [ResponseCache(Duration = 60)]
+        public async Task<IActionResult> GetFeaturedNews(
+            [FromQuery] int count = 10)
         {
-            var result = await _publicNewsService.GetFeaturedNewsAsync(count);
+            var result =
+                await _publicNewsService.GetFeaturedNewsAsync(count);
 
             return Ok(result);
         }
 
         [HttpGet("popular")]
-        public async Task<IActionResult> GetPopularNews([FromQuery] int count = 10)
+        [ResponseCache(Duration = 60)]
+        public async Task<IActionResult> GetPopularNews(
+            [FromQuery] int count = 10)
         {
-            var result = await _publicNewsService.GetPopularNewsAsync(count);
+            var result =
+                await _publicNewsService.GetPopularNewsAsync(count);
 
             return Ok(result);
         }
 
         [HttpGet("category/{categoryId:int}")]
-        public async Task<IActionResult> GetNewsByCategory(int categoryId)
+        [ResponseCache(Duration = 60)]
+        public async Task<IActionResult> GetNewsByCategory(
+            int categoryId)
         {
-            var result = await _publicNewsService.GetNewsByCategoryAsync(categoryId);
+            var result =
+                await _publicNewsService
+                    .GetNewsByCategoryAsync(categoryId);
 
             return Ok(result);
         }
 
         [HttpGet("search")]
-        public async Task<IActionResult> SearchNews([FromQuery] string keyword)
+        [ResponseCache(Duration = 30)]
+        public async Task<IActionResult> SearchNews(
+            [FromQuery] string keyword)
         {
             if (string.IsNullOrWhiteSpace(keyword))
             {
                 return BadRequest("Keyword is required.");
             }
 
-            var result = await _publicNewsService.SearchNewsAsync(keyword);
+            var result =
+                await _publicNewsService
+                    .SearchNewsAsync(keyword);
 
             return Ok(result);
         }
 
         [HttpGet("{slug}")]
-        public async Task<IActionResult> GetNewsBySlug(string slug)
+        [ResponseCache(Duration = 60)]
+        public async Task<IActionResult> GetNewsBySlug(
+            string slug)
         {
-            var result = await _publicNewsService.GetNewsBySlugAsync(slug);
+            var result =
+                await _publicNewsService
+                    .GetNewsBySlugAsync(slug);
 
             if (result == null)
             {
