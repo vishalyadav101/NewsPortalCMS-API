@@ -35,6 +35,7 @@
     <Folder Include="Helpers\" />
     <Folder Include="Middlewares\" />
     <Folder Include="wwwroot\uploads\news\" />
+    <Folder Include="wwwroot\uploads\news\thumbnails\" />
   </ItemGroup>
 
   <ItemGroup>
