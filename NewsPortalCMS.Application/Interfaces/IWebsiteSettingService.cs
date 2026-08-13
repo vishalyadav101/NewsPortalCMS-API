@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using NewsPortalCMS.Application.DTOs.WebsiteSetting;
+﻿using NewsPortalCMS.Application.DTOs.WebsiteSetting;
 
 namespace NewsPortalCMS.Application.Interfaces.Services;
 
@@ -17,16 +16,4 @@ public interface IWebsiteSettingService
         WebsiteSettingUpdateDto model);
 
     Task<bool> DeleteAsync(int id);
-
-
-    // Logo Upload
-    Task<string?> UploadLogoAsync(
-        int id,
-        IFormFile file);
-
-
-    // Favicon Upload
-    Task<string?> UploadFaviconAsync(
-        int id,
-        IFormFile file);
 }

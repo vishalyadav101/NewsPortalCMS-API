@@ -91,24 +91,26 @@ namespace NewsPortalCMS.Services
         ".webm"
     };
 
-            var extension = Path.GetExtension(file.FileName).ToLower();
+            var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
 
             if (!allowedExtensions.Contains(extension))
             {
                 throw new Exception("Invalid video file type.");
             }
 
-            // Maximum file size (100 MB)
-            if (file.Length > 1536L * 1024 * 1024)
+            // Maximum video size = 1 GB
+            if (file.Length > 1L * 1024 * 1024 * 1024)
             {
-                throw new Exception("Video size cannot exceed 100 MB.");
+                throw new Exception("Video size cannot exceed 1 GB.");
             }
 
             var webRootPath = _environment.WebRootPath;
 
             if (string.IsNullOrEmpty(webRootPath))
             {
-                webRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+                webRootPath = Path.Combine(
+                    Directory.GetCurrentDirectory(),
+                    "wwwroot");
             }
 
             // Create uploads/videos folder
@@ -125,15 +127,22 @@ namespace NewsPortalCMS.Services
             // Generate unique filename
             var fileName = $"{Guid.NewGuid()}{extension}";
 
-            var filePath = Path.Combine(uploadFolder, fileName);
+            var filePath = Path.Combine(
+                uploadFolder,
+                fileName);
 
-            using (var stream = new FileStream(filePath, FileMode.Create))
+            await using (var stream = new FileStream(
+                filePath,
+                FileMode.Create))
             {
                 await file.CopyToAsync(stream);
             }
 
             // Return relative path
-            return "/" + Path.Combine("uploads", "videos", fileName)
+            return "/" + Path.Combine(
+                "uploads",
+                "videos",
+                fileName)
                 .Replace("\\", "/");
         }
         public void DeleteFile(string? relativePath)
