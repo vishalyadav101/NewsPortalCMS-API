@@ -18,7 +18,7 @@ namespace NewsPortalCMS.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterDto model)
+        public async Task<IActionResult> Register([FromForm] RegisterDto model)
         {
             var result = await _authService.RegisterAsync(model);
             return Ok(result);

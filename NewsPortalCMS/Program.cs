@@ -301,6 +301,9 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 
 //Cache
 builder.Services.AddScoped<ICacheService, MemoryCacheService>();
+
+//profile
+builder.Services.AddScoped<IProfileService, ProfileService>();
 // ============================================================
 // 6. CONTROLLERS
 // ============================================================
