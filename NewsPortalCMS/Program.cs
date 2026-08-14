@@ -296,6 +296,9 @@ builder.Services.AddScoped<
     IPublicWebsiteSettingService,
     PublicWebsiteSettingService>();
 
+// Role
+builder.Services.AddScoped<IRoleService, RoleService>();
+
 //Cache
 builder.Services.AddScoped<ICacheService, MemoryCacheService>();
 // ============================================================
