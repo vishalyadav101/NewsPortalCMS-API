@@ -166,5 +166,7 @@ namespace NewsPortalCMS.Services
                 File.Delete(fullPath);
             }
         }
+
+
     }
 }

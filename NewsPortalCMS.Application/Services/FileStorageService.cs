@@ -21,14 +21,15 @@ namespace NewsPortalCMS.Infrastructure.Services
 
 
         private static readonly HashSet<string> AllowedFolders =
-    new(StringComparer.OrdinalIgnoreCase)
-    {
+     new(StringComparer.OrdinalIgnoreCase)
+     {
         "news",
         "videos",
         "advertisements",
         "documents",
-        "media"
-    };
+        "media",
+        "profiles"
+     };
 
         private static bool IsValidFolder(string folder)
         {

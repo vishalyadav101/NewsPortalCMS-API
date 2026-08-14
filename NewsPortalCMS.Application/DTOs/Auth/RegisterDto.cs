@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace NewsPortalCMS.Application.DTOs.Auth;
 
@@ -23,4 +24,7 @@ public class RegisterDto
     [Required]
     [Compare("Password")]
     public string ConfirmPassword { get; set; } = string.Empty;
+
+    // Optional profile image
+    public IFormFile? ProfileImage { get; set; }
 }

@@ -26,11 +26,11 @@ public class JwtTokenService
         var roles = await _userManager.GetRolesAsync(user);
 
         var claims = new List<Claim>
-        {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty),
-            new Claim(ClaimTypes.Name, user.UserName ?? string.Empty)
-        };
+{
+    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+    new Claim(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty),
+    new Claim(ClaimTypes.Name, user.UserName ?? string.Empty)
+};
 
         foreach (var role in roles)
         {
