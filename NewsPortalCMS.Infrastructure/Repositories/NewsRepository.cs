@@ -23,7 +23,10 @@ namespace NewsPortalCMS.Repositories
                 .AsNoTracking()
                 .Where(n => !n.IsDeleted);
 
-            // Search
+            // ============================================================
+            // SEARCH
+            // ============================================================
+
             if (!string.IsNullOrWhiteSpace(request.Search))
             {
                 var search = request.Search.Trim();
@@ -34,31 +37,46 @@ namespace NewsPortalCMS.Repositories
                     n.ShortDescription.Contains(search));
             }
 
-            // Category filter
+            // ============================================================
+            // CATEGORY FILTER
+            // ============================================================
+
             if (request.CategoryId.HasValue)
             {
                 query = query.Where(n =>
                     n.CategoryId == request.CategoryId.Value);
             }
 
-            // Published filter
+            // ============================================================
+            // PUBLISHED FILTER
+            // ============================================================
+
             if (request.IsPublished.HasValue)
             {
                 query = query.Where(n =>
                     n.IsPublished == request.IsPublished.Value);
             }
 
-            // Featured filter
+            // ============================================================
+            // FEATURED FILTER
+            // ============================================================
+
             if (request.IsFeatured.HasValue)
             {
                 query = query.Where(n =>
                     n.IsFeatured == request.IsFeatured.Value);
             }
 
-            // Count after applying filters
+            // ============================================================
+            // TOTAL COUNT AFTER FILTERING
+            // ============================================================
+
             var totalCount = await query.CountAsync();
 
-            // Sorting
+            // ============================================================
+            // SORTING
+            // ============================================================
+
             query = request.SortBy?.ToLower() switch
             {
                 "oldest" =>
@@ -74,14 +92,36 @@ namespace NewsPortalCMS.Repositories
                     query.OrderByDescending(n => n.PublishDate)
             };
 
-            // Pagination
-            var items = await query
+            // ============================================================
+            // PAGINATION
+            // Only apply if BOTH PageNumber and PageSize are supplied
+            // ============================================================
+
+            if (request.PageNumber.HasValue &&
+                request.PageSize.HasValue)
+            {
+                var pageNumber = request.PageNumber.Value;
+                var pageSize = request.PageSize.Value;
+
+                var items = await query
+                    .Include(n => n.Category)
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                return (items, totalCount);
+            }
+
+            // ============================================================
+            // NO PAGINATION
+            // Return ALL filtered and sorted records
+            // ============================================================
+
+            var allItems = await query
                 .Include(n => n.Category)
-                .Skip((request.PageNumber - 1) * request.PageSize)
-                .Take(request.PageSize)
                 .ToListAsync();
 
-            return (items, totalCount);
+            return (allItems, totalCount);
         }
         public async Task<News?> GetByIdAsync(int id)
         {

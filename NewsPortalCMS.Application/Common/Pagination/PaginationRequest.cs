@@ -2,24 +2,28 @@
 {
     public class PaginationRequest
     {
-        private int _pageNumber = 1;
-        private int _pageSize = 10;
+        private int? _pageNumber;
+        private int? _pageSize;
 
-        public int PageNumber
+        public int? PageNumber
         {
             get => _pageNumber;
-            set => _pageNumber = value < 1 ? 1 : value;
+            set => _pageNumber = value.HasValue
+                ? (value.Value < 1 ? 1 : value.Value)
+                : null;
         }
 
-        public int PageSize
+        public int? PageSize
         {
             get => _pageSize;
-            set => _pageSize = value switch
-            {
-                < 1 => 10,
-                > 100 => 100,
-                _ => value
-            };
+            set => _pageSize = value.HasValue
+                ? value.Value switch
+                {
+                    < 1 => 10,
+                    > 100 => 100,
+                    _ => value.Value
+                }
+                : null;
         }
     }
 }

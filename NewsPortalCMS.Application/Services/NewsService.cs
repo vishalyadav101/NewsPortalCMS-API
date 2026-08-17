@@ -54,7 +54,7 @@ namespace NewsPortalCMS.Services
         }
 
         public async Task<PaginatedResponse<NewsDto>> GetAllAsync(
-     NewsQueryRequest request)
+       NewsQueryRequest request)
         {
             var result = await _newsRepository.GetAllAsync(request);
 
@@ -78,18 +78,45 @@ namespace NewsPortalCMS.Services
                 UpdatedAt = n.UpdatedAt
             }).ToList();
 
-            var totalPages = (int)Math.Ceiling(
-                result.TotalCount / (double)request.PageSize);
+            // ============================================================
+            // PAGINATION WAS REQUESTED
+            // ============================================================
+
+            if (request.PageNumber.HasValue &&
+                request.PageSize.HasValue)
+            {
+                var pageNumber = request.PageNumber.Value;
+                var pageSize = request.PageSize.Value;
+
+                var totalPages = (int)Math.Ceiling(
+                    result.TotalCount / (double)pageSize);
+
+                return new PaginatedResponse<NewsDto>
+                {
+                    Items = newsDtos,
+                    PageNumber = pageNumber,
+                    PageSize = pageSize,
+                    TotalCount = result.TotalCount,
+                    TotalPages = totalPages,
+                    HasPreviousPage = pageNumber > 1,
+                    HasNextPage = pageNumber < totalPages
+                };
+            }
+
+            // ============================================================
+            // NO PAGINATION
+            // Return ALL filtered/search results
+            // ============================================================
 
             return new PaginatedResponse<NewsDto>
             {
                 Items = newsDtos,
-                PageNumber = request.PageNumber,
-                PageSize = request.PageSize,
+                PageNumber = 1,
+                PageSize = newsDtos.Count,
                 TotalCount = result.TotalCount,
-                TotalPages = totalPages,
-                HasPreviousPage = request.PageNumber > 1,
-                HasNextPage = request.PageNumber < totalPages
+                TotalPages = newsDtos.Count > 0 ? 1 : 0,
+                HasPreviousPage = false,
+                HasNextPage = false
             };
         }
         public async Task<NewsDto?> GetByIdAsync(int id)
