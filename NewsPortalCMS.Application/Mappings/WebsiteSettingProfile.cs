@@ -14,6 +14,7 @@ public class WebsiteSettingProfile : Profile
         CreateMap<WebsiteSettingUpdateDto, WebsiteSetting>();
 
         CreateMap<WebsiteSetting, WebsiteSettingResponseDto>();
+
         CreateMap<WebsiteSetting, PublicWebsiteSettingResponseDto>();
     }
 }

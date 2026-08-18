@@ -60,7 +60,7 @@ public class WebsiteSettingController : ControllerBase
     // POST: api/WebsiteSetting
     [HttpPost]
     public async Task<IActionResult> Create(
-        WebsiteSettingCreateDto model)
+        [FromBody] WebsiteSettingCreateDto model)
     {
         try
         {
@@ -89,7 +89,7 @@ public class WebsiteSettingController : ControllerBase
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(
         int id,
-        WebsiteSettingUpdateDto model)
+        [FromBody] WebsiteSettingUpdateDto model)
     {
         try
         {
@@ -108,7 +108,8 @@ public class WebsiteSettingController : ControllerBase
 
             return Ok(new
             {
-                message = "Website setting updated successfully."
+                message =
+                    "Website setting updated successfully."
             });
         }
         catch (InvalidOperationException ex)
@@ -138,7 +139,8 @@ public class WebsiteSettingController : ControllerBase
 
         return Ok(new
         {
-            message = "Website setting deleted successfully."
+            message =
+                "Website setting deleted successfully."
         });
     }
 
@@ -169,13 +171,15 @@ public class WebsiteSettingController : ControllerBase
             {
                 return NotFound(new
                 {
-                    message = "Website setting not found."
+                    message =
+                        "Website setting not found."
                 });
             }
 
             return Ok(new
             {
-                message = "Logo uploaded successfully.",
+                message =
+                    "Logo uploaded successfully.",
                 logoUrl = result
             });
         }
@@ -215,13 +219,15 @@ public class WebsiteSettingController : ControllerBase
             {
                 return NotFound(new
                 {
-                    message = "Website setting not found."
+                    message =
+                        "Website setting not found."
                 });
             }
 
             return Ok(new
             {
-                message = "Favicon uploaded successfully.",
+                message =
+                    "Favicon uploaded successfully.",
                 faviconUrl = result
             });
         }

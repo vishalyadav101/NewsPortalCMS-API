@@ -18,14 +18,10 @@ public interface IWebsiteSettingService
 
     Task<bool> DeleteAsync(int id);
 
-
-    // Logo Upload
     Task<string?> UploadLogoAsync(
         int id,
         IFormFile file);
 
-
-    // Favicon Upload
     Task<string?> UploadFaviconAsync(
         int id,
         IFormFile file);
