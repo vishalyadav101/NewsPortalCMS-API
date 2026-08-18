@@ -8,11 +8,9 @@ public interface IWebsiteSettingRepository
 
     Task<WebsiteSetting?> GetByIdAsync(int id);
 
-    Task<WebsiteSetting> AddAsync(
-        WebsiteSetting websiteSetting);
+    Task<WebsiteSetting> AddAsync(WebsiteSetting entity);
 
-    Task UpdateAsync(
-        WebsiteSetting websiteSetting);
+    Task UpdateAsync(WebsiteSetting entity);
 
-    Task<bool> DeleteAsync(int id);
+    Task DeleteAsync(WebsiteSetting entity);
 }

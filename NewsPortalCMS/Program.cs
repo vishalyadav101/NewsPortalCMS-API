@@ -304,6 +304,9 @@ builder.Services.AddScoped<ICacheService, MemoryCacheService>();
 
 //profile
 builder.Services.AddScoped<IProfileService, ProfileService>();
+
+//wesitesetting file service
+builder.Services.AddScoped<IWebsiteSettingFileService, WebsiteSettingFileService>();
 // ============================================================
 // 6. CONTROLLERS
 // ============================================================
