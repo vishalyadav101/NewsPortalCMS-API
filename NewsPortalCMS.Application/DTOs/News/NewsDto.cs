@@ -12,8 +12,8 @@
 
         public string Content { get; set; } = string.Empty;
 
-        // Stores the uploaded file path
         public string? FeaturedImage { get; set; }
+
         public string? FeaturedVideo { get; set; }
 
         public string Author { get; set; } = string.Empty;
@@ -26,9 +26,25 @@
 
         public int ViewCount { get; set; }
 
+        // ==========================================
+        // CATEGORY
+        // ==========================================
+
         public int CategoryId { get; set; }
 
         public string CategoryName { get; set; } = string.Empty;
+
+        // ==========================================
+        // SUB CATEGORY
+        // ==========================================
+
+        public int? SubCategoryId { get; set; }
+
+        public string SubCategoryName { get; set; } = string.Empty;
+
+        // ==========================================
+        // AUDIT
+        // ==========================================
 
         public DateTime CreatedAt { get; set; }
 

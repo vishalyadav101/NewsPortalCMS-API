@@ -20,6 +20,7 @@ public class UpdateNewsRequest
     public IFormFile? FeaturedImage { get; set; }
 
     public IFormFile? FeaturedVideo { get; set; }
+
     public string? Author { get; set; }
 
     public DateTime PublishDate { get; set; }
@@ -29,4 +30,10 @@ public class UpdateNewsRequest
     public bool IsFeatured { get; set; }
 
     public int CategoryId { get; set; }
+
+    // ==========================================
+    // SUB CATEGORY
+    // ==========================================
+
+    public int? SubCategoryId { get; set; }
 }

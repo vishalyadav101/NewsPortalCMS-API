@@ -4,7 +4,6 @@ using NewsPortalCMS.Entities;
 using NewsPortalCMS.Infrastructure.Data;
 using NewsPortalCMS.Interfaces;
 
-
 namespace NewsPortalCMS.Repositories
 {
     public class NewsRepository : INewsRepository
@@ -16,16 +15,20 @@ namespace NewsPortalCMS.Repositories
             _context = context;
         }
 
+        // ============================================================
+        // GET ALL NEWS
+        // ============================================================
+
         public async Task<(IEnumerable<News> Items, int TotalCount)> GetAllAsync(
-      NewsQueryRequest request)
+            NewsQueryRequest request)
         {
             var query = _context.News
                 .AsNoTracking()
                 .Where(n => !n.IsDeleted);
 
-            // ============================================================
+            // ========================================================
             // SEARCH
-            // ============================================================
+            // ========================================================
 
             if (!string.IsNullOrWhiteSpace(request.Search))
             {
@@ -37,9 +40,9 @@ namespace NewsPortalCMS.Repositories
                     n.ShortDescription.Contains(search));
             }
 
-            // ============================================================
+            // ========================================================
             // CATEGORY FILTER
-            // ============================================================
+            // ========================================================
 
             if (request.CategoryId.HasValue)
             {
@@ -47,9 +50,9 @@ namespace NewsPortalCMS.Repositories
                     n.CategoryId == request.CategoryId.Value);
             }
 
-            // ============================================================
+            // ========================================================
             // PUBLISHED FILTER
-            // ============================================================
+            // ========================================================
 
             if (request.IsPublished.HasValue)
             {
@@ -57,9 +60,9 @@ namespace NewsPortalCMS.Repositories
                     n.IsPublished == request.IsPublished.Value);
             }
 
-            // ============================================================
+            // ========================================================
             // FEATURED FILTER
-            // ============================================================
+            // ========================================================
 
             if (request.IsFeatured.HasValue)
             {
@@ -67,15 +70,16 @@ namespace NewsPortalCMS.Repositories
                     n.IsFeatured == request.IsFeatured.Value);
             }
 
-            // ============================================================
-            // TOTAL COUNT AFTER FILTERING
-            // ============================================================
+            // ========================================================
+            // TOTAL COUNT
+            // ========================================================
 
-            var totalCount = await query.CountAsync();
+            var totalCount =
+                await query.CountAsync();
 
-            // ============================================================
+            // ========================================================
             // SORTING
-            // ============================================================
+            // ========================================================
 
             query = request.SortBy?.ToLower() switch
             {
@@ -83,75 +87,138 @@ namespace NewsPortalCMS.Repositories
                     query.OrderBy(n => n.PublishDate),
 
                 "popular" =>
-                    query.OrderByDescending(n => n.ViewCount),
+                    query.OrderByDescending(
+                        n => n.ViewCount),
 
                 "title" =>
                     query.OrderBy(n => n.Title),
 
                 _ =>
-                    query.OrderByDescending(n => n.PublishDate)
+                    query.OrderByDescending(
+                        n => n.PublishDate)
             };
 
-            // ============================================================
+            // ========================================================
             // PAGINATION
-            // Only apply if BOTH PageNumber and PageSize are supplied
-            // ============================================================
+            // ========================================================
 
             if (request.PageNumber.HasValue &&
                 request.PageSize.HasValue)
             {
-                var pageNumber = request.PageNumber.Value;
-                var pageSize = request.PageSize.Value;
+                var pageNumber =
+                    request.PageNumber.Value;
+
+                var pageSize =
+                    request.PageSize.Value;
 
                 var items = await query
                     .Include(n => n.Category)
-                    .Skip((pageNumber - 1) * pageSize)
+                    .Include(n => n.SubCategory)
+                    .Skip(
+                        (pageNumber - 1) *
+                        pageSize)
                     .Take(pageSize)
                     .ToListAsync();
 
-                return (items, totalCount);
+                return (
+                    items,
+                    totalCount);
             }
 
-            // ============================================================
+            // ========================================================
             // NO PAGINATION
-            // Return ALL filtered and sorted records
-            // ============================================================
+            // ========================================================
 
             var allItems = await query
                 .Include(n => n.Category)
+                .Include(n => n.SubCategory)
                 .ToListAsync();
 
-            return (allItems, totalCount);
+            return (
+                allItems,
+                totalCount);
         }
+
+        // ============================================================
+        // GET BY ID
+        // ============================================================
+
         public async Task<News?> GetByIdAsync(int id)
         {
             return await _context.News
                 .Include(n => n.Category)
+                .Include(n => n.SubCategory)
                 .FirstOrDefaultAsync(
-                    n => n.Id == id && !n.IsDeleted);
+                    n =>
+                        n.Id == id &&
+                        !n.IsDeleted);
         }
 
-        public async Task<News> CreateAsync(News news)
+        // ============================================================
+        // CREATE
+        // ============================================================
+
+        public async Task<News> CreateAsync(
+            News news)
         {
             await _context.News.AddAsync(news);
+
             await _context.SaveChangesAsync();
+
+            // Load Category
+            await _context.Entry(news)
+                .Reference(n => n.Category)
+                .LoadAsync();
+
+            // Load SubCategory
+            if (news.SubCategoryId.HasValue)
+            {
+                await _context.Entry(news)
+                    .Reference(n => n.SubCategory)
+                    .LoadAsync();
+            }
 
             return news;
         }
 
-        public async Task<News?> UpdateAsync(News news)
+        // ============================================================
+        // UPDATE
+        // ============================================================
+
+        public async Task<News?> UpdateAsync(
+            News news)
         {
-            var existingNews = await _context.News
-                .FirstOrDefaultAsync(
-                    n => n.Id == news.Id && !n.IsDeleted);
+            var existingNews =
+                await _context.News
+                    .FirstOrDefaultAsync(
+                        n =>
+                            n.Id == news.Id &&
+                            !n.IsDeleted);
 
             if (existingNews == null)
+            {
                 return null;
+            }
 
-            existingNews.Title = news.Title;
-            existingNews.Slug = news.Slug;
-            existingNews.ShortDescription = news.ShortDescription;
-            existingNews.Content = news.Content;
+            // ========================================================
+            // BASIC DETAILS
+            // ========================================================
+
+            existingNews.Title =
+                news.Title;
+
+            existingNews.Slug =
+                news.Slug;
+
+            existingNews.ShortDescription =
+                news.ShortDescription;
+
+            existingNews.Content =
+                news.Content;
+
+            // ========================================================
+            // FILES
+            // ========================================================
 
             existingNews.FeaturedImage =
                 news.FeaturedImage;
@@ -159,85 +226,174 @@ namespace NewsPortalCMS.Repositories
             existingNews.FeaturedVideo =
                 news.FeaturedVideo;
 
-            existingNews.Author = news.Author;
-            existingNews.PublishDate = news.PublishDate;
-            existingNews.IsPublished = news.IsPublished;
-            existingNews.IsFeatured = news.IsFeatured;
-            existingNews.CategoryId = news.CategoryId;
+            // ========================================================
+            // AUTHOR / DATE / STATUS
+            // ========================================================
 
-            existingNews.UpdatedAt = DateTime.UtcNow;
+            existingNews.Author =
+                news.Author;
+
+            existingNews.PublishDate =
+                news.PublishDate;
+
+            existingNews.IsPublished =
+                news.IsPublished;
+
+            existingNews.IsFeatured =
+                news.IsFeatured;
+
+            // ========================================================
+            // CATEGORY
+            // ========================================================
+
+            existingNews.CategoryId =
+                news.CategoryId;
+
+            // ========================================================
+            // SUB CATEGORY
+            // ========================================================
+
+            existingNews.SubCategoryId =
+                news.SubCategoryId;
+
+            // ========================================================
+            // UPDATED DATE
+            // ========================================================
+
+            existingNews.UpdatedAt =
+                DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
 
-            // Reload category so CategoryName is available
+            // ========================================================
+            // RELOAD CATEGORY
+            // ========================================================
+
             await _context.Entry(existingNews)
                 .Reference(n => n.Category)
                 .LoadAsync();
 
+            // ========================================================
+            // RELOAD SUB CATEGORY
+            // ========================================================
+
+            if (existingNews.SubCategoryId.HasValue)
+            {
+                await _context.Entry(existingNews)
+                    .Reference(n => n.SubCategory)
+                    .LoadAsync();
+            }
+
             return existingNews;
         }
 
+        // ============================================================
+        // DELETE
+        // ============================================================
+
         public async Task<bool> DeleteAsync(int id)
         {
-            var news = await _context.News
-                .FirstOrDefaultAsync(
-                    n => n.Id == id && !n.IsDeleted);
+            var news =
+                await _context.News
+                    .FirstOrDefaultAsync(
+                        n =>
+                            n.Id == id &&
+                            !n.IsDeleted);
 
             if (news == null)
+            {
                 return false;
+            }
 
             news.IsDeleted = true;
-            news.UpdatedAt = DateTime.UtcNow;
+
+            news.UpdatedAt =
+                DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
 
             return true;
         }
+
+        // ============================================================
+        // RESTORE
+        // ============================================================
 
         public async Task<bool> RestoreAsync(int id)
         {
-            var news = await _context.News
-                .FirstOrDefaultAsync(n => n.Id == id);
+            var news =
+                await _context.News
+                    .FirstOrDefaultAsync(
+                        n => n.Id == id);
 
             if (news == null)
+            {
                 return false;
+            }
 
             news.IsDeleted = false;
-            news.UpdatedAt = DateTime.UtcNow;
+
+            news.UpdatedAt =
+                DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
 
             return true;
         }
+
+        // ============================================================
+        // EXISTS
+        // ============================================================
 
         public async Task<bool> ExistsAsync(int id)
         {
             return await _context.News
                 .AnyAsync(
-                    n => n.Id == id && !n.IsDeleted);
+                    n =>
+                        n.Id == id &&
+                        !n.IsDeleted);
         }
 
-        public async Task<bool> SlugExistsAsync(string slug)
+        // ============================================================
+        // SLUG EXISTS
+        // ============================================================
+
+        public async Task<bool> SlugExistsAsync(
+            string slug)
         {
             return await _context.News
                 .AnyAsync(
-                    n => n.Slug.ToLower() == slug.ToLower()
-                         && !n.IsDeleted);
+                    n =>
+                        n.Slug.ToLower() ==
+                        slug.ToLower() &&
+                        !n.IsDeleted);
         }
 
-        public async Task<bool> TitleExistsAsync(string title)
+        // ============================================================
+        // TITLE EXISTS
+        // ============================================================
+
+        public async Task<bool> TitleExistsAsync(
+            string title)
         {
             return await _context.News
                 .AnyAsync(
-                    n => n.Title.ToLower() == title.ToLower()
-                         && !n.IsDeleted);
+                    n =>
+                        n.Title.ToLower() ==
+                        title.ToLower() &&
+                        !n.IsDeleted);
         }
+
+        // ============================================================
+        // CATEGORY EXISTS
+        // ============================================================
 
         public async Task<bool> CategoryExistsAsync(
             int categoryId)
         {
             return await _context.Categories
-                .AnyAsync(c => c.Id == categoryId);
+                .AnyAsync(
+                    c => c.Id == categoryId);
         }
     }
 }

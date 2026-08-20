@@ -33,12 +33,13 @@ namespace NewsPortalCMS.Controllers
 
         // ============================================================
         // GET ALL NEWS
+        // PUBLIC API
         // ============================================================
 
+        [AllowAnonymous]
         [HttpGet]
-        
         public async Task<IActionResult> GetAll(
-    [FromQuery] NewsQueryRequest request)
+            [FromQuery] NewsQueryRequest request)
         {
             var news = await _newsService.GetAllAsync(request);
 
@@ -47,8 +48,10 @@ namespace NewsPortalCMS.Controllers
 
         // ============================================================
         // GET NEWS BY ID
+        // PUBLIC API
         // ============================================================
 
+        [AllowAnonymous]
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -67,8 +70,10 @@ namespace NewsPortalCMS.Controllers
 
         // ============================================================
         // CREATE NEWS
+        // ADMIN / AUTHENTICATED ONLY
         // ============================================================
 
+        [Authorize]
         [HttpPost]
         [RequestSizeLimit(1610612736)]
         [RequestFormLimits(MultipartBodyLengthLimit = 1610612736)]
@@ -215,7 +220,9 @@ namespace NewsPortalCMS.Controllers
 
                 IsFeatured = request.IsFeatured,
 
-                CategoryId = request.CategoryId
+                CategoryId = request.CategoryId,
+
+                SubCategoryId = request.SubCategoryId
             };
 
             var createdNews =
@@ -229,8 +236,10 @@ namespace NewsPortalCMS.Controllers
 
         // ============================================================
         // UPDATE NEWS
+        // ADMIN / AUTHENTICATED ONLY
         // ============================================================
 
+        [Authorize]
         [HttpPut("{id:int}")]
         [RequestSizeLimit(1610612736)]
         [RequestFormLimits(MultipartBodyLengthLimit = 1610612736)]
@@ -425,7 +434,10 @@ namespace NewsPortalCMS.Controllers
                     request.IsFeatured,
 
                 CategoryId =
-                    request.CategoryId
+                    request.CategoryId,
+
+                SubCategoryId =
+                    request.SubCategoryId
             };
 
             var updatedNews =
@@ -444,8 +456,10 @@ namespace NewsPortalCMS.Controllers
 
         // ============================================================
         // DELETE NEWS
+        // ADMIN / AUTHENTICATED ONLY
         // ============================================================
 
+        [Authorize]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {

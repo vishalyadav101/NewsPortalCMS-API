@@ -27,6 +27,9 @@ namespace NewsPortalCMS.Entities
         [MaxLength(500)]
         public string? FeaturedImage { get; set; }
 
+        [MaxLength(500)]
+        public string? FeaturedVideo { get; set; }
+
         [MaxLength(100)]
         public string? Author { get; set; }
 
@@ -36,18 +39,48 @@ namespace NewsPortalCMS.Entities
 
         public int ViewCount { get; set; }
 
+        // ==========================================
+        // CATEGORY
+        // ==========================================
+
         [ForeignKey("Category")]
         public int CategoryId { get; set; }
 
         public Category? Category { get; set; }
+
+        // ==========================================
+        // SUB CATEGORY
+        // ==========================================
+
+        [ForeignKey("SubCategory")]
+        public int? SubCategoryId { get; set; }
+
+        public SubCategory? SubCategory { get; set; }
+
+        // ==========================================
+        // STATUS
+        // ==========================================
+
         public bool IsDeleted { get; set; } = false;
+
+        public bool IsFeatured { get; set; } = false;
+
+        // ==========================================
+        // AUDIT
+        // ==========================================
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public DateTime? UpdatedAt { get; set; }
-        public ICollection<NewsTag> NewsTags { get; set; } = new List<NewsTag>();
-        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
-        public bool IsFeatured { get; set; } = false;
-        public string? FeaturedVideo { get; set; }
+
+        // ==========================================
+        // RELATIONSHIPS
+        // ==========================================
+
+        public ICollection<NewsTag> NewsTags { get; set; } =
+            new List<NewsTag>();
+
+        public ICollection<Comment> Comments { get; set; } =
+            new List<Comment>();
     }
 }

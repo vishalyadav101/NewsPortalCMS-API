@@ -17,6 +17,7 @@ namespace NewsPortalCMS.Models.News
         public string Content { get; set; } = string.Empty;
 
         public IFormFile? FeaturedImage { get; set; }
+
         public IFormFile? FeaturedVideo { get; set; }
 
         public string Author { get; set; } = string.Empty;
@@ -28,5 +29,12 @@ namespace NewsPortalCMS.Models.News
         public bool IsFeatured { get; set; }
 
         public int CategoryId { get; set; }
+
+        // ==========================================
+        // SUB CATEGORY
+        // Optional for existing records
+        // ==========================================
+
+        public int? SubCategoryId { get; set; }
     }
 }

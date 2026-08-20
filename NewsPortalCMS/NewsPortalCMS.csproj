@@ -36,6 +36,7 @@
     <Folder Include="Middlewares\" />
     <Folder Include="wwwroot\uploads\news\" />
     <Folder Include="wwwroot\uploads\news\thumbnails\" />
+    <Folder Include="wwwroot\uploads\profiles\" />
   </ItemGroup>
 
   <ItemGroup>
