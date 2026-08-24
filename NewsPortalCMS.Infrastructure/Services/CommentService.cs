@@ -19,12 +19,22 @@ public class CommentService : ICommentService
         _mapper = mapper;
     }
 
+
+    // ==========================================
+    // GET ALL
+    // ==========================================
+
     public async Task<IEnumerable<CommentResponseDto>> GetAllAsync()
     {
         var comments = await _commentRepository.GetAllAsync();
 
         return _mapper.Map<IEnumerable<CommentResponseDto>>(comments);
     }
+
+
+    // ==========================================
+    // GET BY ID
+    // ==========================================
 
     public async Task<CommentResponseDto?> GetByIdAsync(Guid id)
     {
@@ -36,6 +46,11 @@ public class CommentService : ICommentService
         return _mapper.Map<CommentResponseDto>(comment);
     }
 
+
+    // ==========================================
+    // GET BY NEWS ID
+    // ==========================================
+
     public async Task<IEnumerable<CommentResponseDto>> GetByNewsIdAsync(int newsId)
     {
         var comments = await _commentRepository.GetByNewsIdAsync(newsId);
@@ -43,43 +58,95 @@ public class CommentService : ICommentService
         return _mapper.Map<IEnumerable<CommentResponseDto>>(comments);
     }
 
-    public async Task<CommentResponseDto> CreateAsync(CreateCommentDto createCommentDto)
+
+    // ==========================================
+    // CREATE COMMENT
+    // ==========================================
+
+    public async Task<CommentResponseDto> CreateAsync(
+        CreateCommentDto createCommentDto)
     {
         var comment = _mapper.Map<Comment>(createCommentDto);
 
+        // ======================================
+        // SYSTEM VALUES
+        // ======================================
+
         comment.CreatedDate = DateTime.UtcNow;
-        comment.IsApproved = false;
+
+        // Automatically approve new comments
+        comment.IsApproved = true;
+
+        // Automatically make comment active
         comment.IsActive = true;
 
+
+        // ======================================
+        // SAVE
+        // ======================================
+
         await _commentRepository.AddAsync(comment);
+
+
+        // ======================================
+        // RESPONSE
+        // ======================================
 
         return _mapper.Map<CommentResponseDto>(comment);
     }
 
-    public async Task<bool> UpdateAsync(Guid id, UpdateCommentDto updateCommentDto)
+
+    // ==========================================
+    // UPDATE COMMENT
+    // ==========================================
+
+    public async Task<bool> UpdateAsync(
+        Guid id,
+        UpdateCommentDto updateCommentDto)
     {
-        var comment = await _commentRepository.GetByIdAsync(id);
+        var comment =
+            await _commentRepository.GetByIdAsync(id);
 
         if (comment == null)
             return false;
 
-        _mapper.Map(updateCommentDto, comment);
 
-        comment.UpdatedDate = DateTime.UtcNow;
+        _mapper.Map(
+            updateCommentDto,
+            comment
+        );
 
-        await _commentRepository.UpdateAsync(comment);
+
+        comment.UpdatedDate =
+            DateTime.UtcNow;
+
+
+        await _commentRepository.UpdateAsync(
+            comment
+        );
+
 
         return true;
     }
 
+
+    // ==========================================
+    // DELETE COMMENT
+    // ==========================================
+
     public async Task<bool> DeleteAsync(Guid id)
     {
-        var comment = await _commentRepository.GetByIdAsync(id);
+        var comment =
+            await _commentRepository.GetByIdAsync(id);
 
         if (comment == null)
             return false;
 
-        await _commentRepository.DeleteAsync(comment);
+
+        await _commentRepository.DeleteAsync(
+            comment
+        );
+
 
         return true;
     }
