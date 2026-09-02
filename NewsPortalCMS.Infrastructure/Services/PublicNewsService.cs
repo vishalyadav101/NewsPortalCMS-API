@@ -164,7 +164,44 @@ namespace NewsPortalCMS.Application.Services
 
             return result;
         }
+        // ============================================================
+        // NEWS BY SUBCATEGORY
+        // ============================================================
 
+        public async Task<IEnumerable<PublicNewsDto>> GetNewsBySubcategoryAsync(
+            int subcategoryId)
+        {
+            if (subcategoryId <= 0)
+            {
+                return Enumerable.Empty<PublicNewsDto>();
+            }
+
+            var cacheKey =
+                $"{PublicNewsCacheKeys.Category}_subcategory_{subcategoryId}";
+
+            if (_cache.TryGetValue(
+                cacheKey,
+                out IEnumerable<PublicNewsDto>? cachedNews))
+            {
+                return cachedNews!;
+            }
+
+            var news =
+                await _repository
+                    .GetNewsBySubcategoryAsync(subcategoryId);
+
+            var result =
+                _mapper.Map<IEnumerable<PublicNewsDto>>(news);
+
+            _cache.Set(
+                cacheKey,
+                result,
+                GetCacheOptions(TimeSpan.FromMinutes(2)));
+
+            _cacheService.TrackKey(cacheKey);
+
+            return result;
+        }
         // ============================================================
         // SEARCH NEWS
         // ============================================================

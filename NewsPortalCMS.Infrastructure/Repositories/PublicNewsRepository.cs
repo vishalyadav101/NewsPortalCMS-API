@@ -95,6 +95,28 @@ namespace NewsPortalCMS.Infrastructure.Repositories
                 .OrderByDescending(n => n.PublishDate)
                 .ToListAsync();
         }
+        // ============================================================
+        // NEWS BY SUBCATEGORY
+        // ============================================================
+
+        public async Task<IEnumerable<News>> GetNewsBySubcategoryAsync(
+            int subcategoryId)
+        {
+            if (subcategoryId <= 0)
+            {
+                return Enumerable.Empty<News>();
+            }
+
+            return await _context.News
+                .AsNoTracking()
+                .Where(n =>
+                    n.SubCategoryId == subcategoryId &&
+                    n.IsPublished &&
+                    !n.IsDeleted)
+                .Include(n => n.Category)
+                .OrderByDescending(n => n.PublishDate)
+                .ToListAsync();
+        }
 
         // ============================================================
         // SEARCH NEWS

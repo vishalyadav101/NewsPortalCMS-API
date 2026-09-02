@@ -9,10 +9,15 @@ namespace NewsPortalCMS.API.Controllers.Public
     {
         private readonly IPublicNewsService _publicNewsService;
 
-        public PublicNewsController(IPublicNewsService publicNewsService)
+        public PublicNewsController(
+            IPublicNewsService publicNewsService)
         {
             _publicNewsService = publicNewsService;
         }
+
+        // ============================================================
+        // LATEST NEWS
+        // ============================================================
 
         [HttpGet("latest")]
         [ResponseCache(Duration = 60)]
@@ -20,10 +25,15 @@ namespace NewsPortalCMS.API.Controllers.Public
             [FromQuery] int count = 10)
         {
             var result =
-                await _publicNewsService.GetLatestNewsAsync(count);
+                await _publicNewsService
+                    .GetLatestNewsAsync(count);
 
             return Ok(result);
         }
+
+        // ============================================================
+        // FEATURED NEWS
+        // ============================================================
 
         [HttpGet("featured")]
         [ResponseCache(Duration = 60)]
@@ -31,10 +41,15 @@ namespace NewsPortalCMS.API.Controllers.Public
             [FromQuery] int count = 10)
         {
             var result =
-                await _publicNewsService.GetFeaturedNewsAsync(count);
+                await _publicNewsService
+                    .GetFeaturedNewsAsync(count);
 
             return Ok(result);
         }
+
+        // ============================================================
+        // POPULAR NEWS
+        // ============================================================
 
         [HttpGet("popular")]
         [ResponseCache(Duration = 60)]
@@ -42,10 +57,15 @@ namespace NewsPortalCMS.API.Controllers.Public
             [FromQuery] int count = 10)
         {
             var result =
-                await _publicNewsService.GetPopularNewsAsync(count);
+                await _publicNewsService
+                    .GetPopularNewsAsync(count);
 
             return Ok(result);
         }
+
+        // ============================================================
+        // NEWS BY CATEGORY
+        // ============================================================
 
         [HttpGet("category/{categoryId:int}")]
         [ResponseCache(Duration = 60)]
@@ -58,6 +78,26 @@ namespace NewsPortalCMS.API.Controllers.Public
 
             return Ok(result);
         }
+
+        // ============================================================
+        // NEWS BY SUBCATEGORY
+        // ============================================================
+
+        [HttpGet("subcategory/{subcategoryId:int}")]
+        [ResponseCache(Duration = 60)]
+        public async Task<IActionResult> GetNewsBySubcategory(
+            int subcategoryId)
+        {
+            var result =
+                await _publicNewsService
+                    .GetNewsBySubcategoryAsync(subcategoryId);
+
+            return Ok(result);
+        }
+
+        // ============================================================
+        // SEARCH NEWS
+        // ============================================================
 
         [HttpGet("search")]
         [ResponseCache(Duration = 30)]
@@ -75,6 +115,10 @@ namespace NewsPortalCMS.API.Controllers.Public
 
             return Ok(result);
         }
+
+        // ============================================================
+        // NEWS DETAILS BY SLUG
+        // ============================================================
 
         [HttpGet("{slug}")]
         [ResponseCache(Duration = 60)]
