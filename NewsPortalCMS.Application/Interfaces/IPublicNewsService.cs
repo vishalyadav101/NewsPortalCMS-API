@@ -12,6 +12,8 @@ namespace NewsPortalCMS.Application.Interfaces.Services
 
         Task<IEnumerable<PublicNewsDto>> GetNewsByCategoryAsync(int categoryId);
 
+        Task<IEnumerable<PublicNewsDto>> GetNewsBySubcategoryAsync(int subcategoryId);
+
         Task<IEnumerable<PublicNewsDto>> SearchNewsAsync(string keyword);
 
         Task<PublicNewsDetailsDto?> GetNewsBySlugAsync(string slug);
