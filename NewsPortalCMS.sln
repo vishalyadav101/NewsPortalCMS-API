@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 18
-VisualStudioVersion = 18.7.11903.348
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36915.13
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsPortalCMS", "NewsPortalCMS\NewsPortalCMS.csproj", "{A904ACCC-0C1A-4AB5-A855-541CD5AEE754}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
@@ -18,16 +16,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsPortalCMS.Infrastructur
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsPortalCMS.Shared", "NewsPortalCMS.Shared\NewsPortalCMS.Shared.csproj", "{5BBB2642-7399-4941-95F6-252088812B90}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsPortalCMS", "NewsPortalCMS\NewsPortalCMS.csproj", "{58CD5B05-85D8-6FBE-2823-3AB103B2DF06}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A904ACCC-0C1A-4AB5-A855-541CD5AEE754}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A904ACCC-0C1A-4AB5-A855-541CD5AEE754}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A904ACCC-0C1A-4AB5-A855-541CD5AEE754}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A904ACCC-0C1A-4AB5-A855-541CD5AEE754}.Release|Any CPU.Build.0 = Release|Any CPU
 		{77542FDE-59DD-4F96-96DA-662D9D50C688}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{77542FDE-59DD-4F96-96DA-662D9D50C688}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77542FDE-59DD-4F96-96DA-662D9D50C688}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -44,6 +40,10 @@ Global
 		{5BBB2642-7399-4941-95F6-252088812B90}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5BBB2642-7399-4941-95F6-252088812B90}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5BBB2642-7399-4941-95F6-252088812B90}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58CD5B05-85D8-6FBE-2823-3AB103B2DF06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58CD5B05-85D8-6FBE-2823-3AB103B2DF06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58CD5B05-85D8-6FBE-2823-3AB103B2DF06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58CD5B05-85D8-6FBE-2823-3AB103B2DF06}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

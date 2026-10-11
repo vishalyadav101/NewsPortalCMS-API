@@ -34,9 +34,9 @@
     <Folder Include="Filters\" />
     <Folder Include="Helpers\" />
     <Folder Include="Middlewares\" />
-    <Folder Include="wwwroot\uploads\news\" />
     <Folder Include="wwwroot\uploads\news\thumbnails\" />
     <Folder Include="wwwroot\uploads\profiles\" />
+    <Folder Include="wwwroot\uploads\videos\" />
   </ItemGroup>
 
   <ItemGroup>
