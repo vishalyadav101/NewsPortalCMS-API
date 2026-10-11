@@ -74,5 +74,12 @@ appsettings.Development.json
 Thumbs.db
 Desktop.ini
 .DS_Store
+############################
+# User Uploaded Images
+############################
 
+NewsPortalCMS/wwwroot/uploads/news/*
+NewsPortalCMS/wwwroot/uploads/thumbnails/*
+NewsPortalCMS/wwwroot/uploads/profiles/*
+NewsPortalCMS/wwwroot/uploads/videos/*
 
