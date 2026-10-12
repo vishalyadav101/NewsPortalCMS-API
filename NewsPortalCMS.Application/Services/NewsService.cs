@@ -476,7 +476,7 @@ namespace NewsPortalCMS.Services
                     dto.FeaturedImage)
             {
                 await _fileStorageService
-                    .DeleteWithThumbnailAsync(
+                    .DeleteAsync(
                         existingNews.FeaturedImage);
             }
 
@@ -664,7 +664,7 @@ namespace NewsPortalCMS.Services
                 news.FeaturedImage))
             {
                 await _fileStorageService
-                    .DeleteWithThumbnailAsync(
+                    .DeleteAsync(
                         news.FeaturedImage);
             }
 

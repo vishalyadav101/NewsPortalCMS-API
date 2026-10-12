@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NewsPortalCMS.Application.Interfaces.Repositories;
 using NewsPortalCMS.Application.Interfaces.Services;
@@ -31,26 +32,17 @@ namespace NewsPortalCMS.Controllers
             _mediaRepository = mediaRepository;
         }
 
-        // ============================================================
-        // GET ALL NEWS
-        // PUBLIC API
-        // ============================================================
-
+        // GET ALL NEWS - PUBLIC API
         [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAll(
             [FromQuery] NewsQueryRequest request)
         {
             var news = await _newsService.GetAllAsync(request);
-
             return Ok(news);
         }
 
-        // ============================================================
-        // GET NEWS BY ID
-        // PUBLIC API
-        // ============================================================
-
+        // GET NEWS BY ID - PUBLIC API
         [AllowAnonymous]
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
@@ -68,11 +60,7 @@ namespace NewsPortalCMS.Controllers
             return Ok(news);
         }
 
-        // ============================================================
         // CREATE NEWS
-        // ADMIN / AUTHENTICATED ONLY
-        // ============================================================
-
         [Authorize]
         [HttpPost]
         [RequestSizeLimit(1610612736)]
@@ -82,151 +70,93 @@ namespace NewsPortalCMS.Controllers
             [FromForm] CreateNewsRequest request)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
             string? imagePath = null;
             string? videoPath = null;
 
-            // ========================================================
-            // IMAGE UPLOAD
-            // ========================================================
-
+            // Upload featured image
             if (request.FeaturedImage != null)
             {
                 _fileValidationService.ValidateImage(
                     request.FeaturedImage);
 
-                imagePath =
-                    await _fileStorageService.SaveImageWithThumbnailAsync(
-                        request.FeaturedImage,
-                        "news");
+                imagePath = await _fileStorageService.SaveAsync(
+                    request.FeaturedImage,
+                    "news");
             }
 
-            // ========================================================
-            // VIDEO UPLOAD
-            // ========================================================
-
+            // Upload featured video
             if (request.FeaturedVideo != null)
             {
                 _fileValidationService.ValidateVideo(
                     request.FeaturedVideo);
 
-                videoPath =
-                    await _fileStorageService.SaveAsync(
-                        request.FeaturedVideo,
-                        "videos");
+                videoPath = await _fileStorageService.SaveAsync(
+                    request.FeaturedVideo,
+                    "videos");
             }
 
-            // ========================================================
-            // SAVE IMAGE IN MEDIA LIBRARY
-            // ========================================================
-
+            // Save image in media library
             if (request.FeaturedImage != null &&
                 !string.IsNullOrEmpty(imagePath))
             {
                 var media = new Media
                 {
                     FileName = Path.GetFileName(imagePath),
-
-                    OriginalFileName =
-                        request.FeaturedImage.FileName,
-
+                    OriginalFileName = request.FeaturedImage.FileName,
                     FilePath = imagePath,
-
-                    FileType =
-                        Path.GetExtension(
-                            request.FeaturedImage.FileName),
-
-                    ContentType =
-                        request.FeaturedImage.ContentType,
-
-                    FileSize =
-                        request.FeaturedImage.Length,
-
-                    UploadedBy =
-                        User.Identity?.Name ?? "Admin",
-
+                    FileType = Path.GetExtension(
+                        request.FeaturedImage.FileName),
+                    ContentType = request.FeaturedImage.ContentType,
+                    FileSize = request.FeaturedImage.Length,
+                    UploadedBy = User.Identity?.Name ?? "Admin",
                     UploadedDate = DateTime.UtcNow,
-
                     IsActive = true
                 };
 
                 await _mediaRepository.AddAsync(media);
             }
 
-            // ========================================================
-            // SAVE VIDEO IN MEDIA LIBRARY
-            // ========================================================
-
+            // Save video in media library
             if (request.FeaturedVideo != null &&
                 !string.IsNullOrEmpty(videoPath))
             {
                 var media = new Media
                 {
                     FileName = Path.GetFileName(videoPath),
-
-                    OriginalFileName =
-                        request.FeaturedVideo.FileName,
-
+                    OriginalFileName = request.FeaturedVideo.FileName,
                     FilePath = videoPath,
-
-                    FileType =
-                        Path.GetExtension(
-                            request.FeaturedVideo.FileName),
-
-                    ContentType =
-                        request.FeaturedVideo.ContentType,
-
-                    FileSize =
-                        request.FeaturedVideo.Length,
-
-                    UploadedBy =
-                        User.Identity?.Name ?? "Admin",
-
+                    FileType = Path.GetExtension(
+                        request.FeaturedVideo.FileName),
+                    ContentType = request.FeaturedVideo.ContentType,
+                    FileSize = request.FeaturedVideo.Length,
+                    UploadedBy = User.Identity?.Name ?? "Admin",
                     UploadedDate = DateTime.UtcNow,
-
                     IsActive = true
                 };
 
                 await _mediaRepository.AddAsync(media);
             }
 
-            // ========================================================
-            // CREATE NEWS DTO
-            // ========================================================
-
+            // Create news DTO
             var dto = new CreateNewsDto
             {
                 Title = request.Title,
-
                 Slug = request.Slug,
-
-                ShortDescription =
-                    request.ShortDescription,
-
+                ShortDescription = request.ShortDescription,
                 Content = request.Content,
-
                 FeaturedImage = imagePath,
-
                 FeaturedVideo = videoPath,
-
                 Author = request.Author,
-
                 PublishDate = request.PublishDate,
-
                 IsPublished = request.IsPublished,
-
                 IsFeatured = request.IsFeatured,
-
                 CategoryId = request.CategoryId,
-
                 SubCategoryId = request.SubCategoryId
             };
 
-            var createdNews =
-                await _newsService.CreateAsync(dto);
+            var createdNews = await _newsService.CreateAsync(dto);
 
             return CreatedAtAction(
                 nameof(GetById),
@@ -234,11 +164,7 @@ namespace NewsPortalCMS.Controllers
                 createdNews);
         }
 
-        // ============================================================
         // UPDATE NEWS
-        // ADMIN / AUTHENTICATED ONLY
-        // ============================================================
-
         [Authorize]
         [HttpPut("{id:int}")]
         [RequestSizeLimit(1610612736)]
@@ -249,16 +175,10 @@ namespace NewsPortalCMS.Controllers
             [FromForm] UpdateNewsRequest request)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
-            // ========================================================
-            // GET EXISTING NEWS
-            // ========================================================
-
-            var existingNews =
-                await _newsService.GetByIdAsync(id);
+            // Get existing news
+            var existingNews = await _newsService.GetByIdAsync(id);
 
             if (existingNews == null)
             {
@@ -269,66 +189,43 @@ namespace NewsPortalCMS.Controllers
             }
 
             // Keep existing files if no new file is uploaded
-            string? imagePath =
-                existingNews.FeaturedImage;
+            string? imagePath = existingNews.FeaturedImage;
+            string? videoPath = existingNews.FeaturedVideo;
 
-            string? videoPath =
-                existingNews.FeaturedVideo;
-
-            // ========================================================
-            // NEW IMAGE
-            // ========================================================
-
+            // Upload new image (without thumbnail processing)
             if (request.FeaturedImage != null)
             {
                 _fileValidationService.ValidateImage(
                     request.FeaturedImage);
 
-                var newImagePath =
-                    await _fileStorageService.SaveImageWithThumbnailAsync(
-                        request.FeaturedImage,
-                        "news");
+                var newImagePath = await _fileStorageService.SaveAsync(
+                    request.FeaturedImage,
+                    "news");
 
-                // Delete old image + thumbnail
+                // Delete old image (without thumbnail handling)
                 if (!string.IsNullOrWhiteSpace(
                     existingNews.FeaturedImage))
                 {
-                    await _fileStorageService.DeleteWithThumbnailAsync(
+                    await _fileStorageService.DeleteAsync(
                         existingNews.FeaturedImage);
                 }
 
                 imagePath = newImagePath;
 
-                // Save new image in Media Library
+                // Save new image in media library
                 if (!string.IsNullOrEmpty(imagePath))
                 {
                     var media = new Media
                     {
-                        FileName =
-                            Path.GetFileName(imagePath),
-
-                        OriginalFileName =
-                            request.FeaturedImage.FileName,
-
-                        FilePath =
-                            imagePath,
-
-                        FileType =
-                            Path.GetExtension(
-                                request.FeaturedImage.FileName),
-
-                        ContentType =
-                            request.FeaturedImage.ContentType,
-
-                        FileSize =
-                            request.FeaturedImage.Length,
-
-                        UploadedBy =
-                            User.Identity?.Name ?? "Admin",
-
-                        UploadedDate =
-                            DateTime.UtcNow,
-
+                        FileName = Path.GetFileName(imagePath),
+                        OriginalFileName = request.FeaturedImage.FileName,
+                        FilePath = imagePath,
+                        FileType = Path.GetExtension(
+                            request.FeaturedImage.FileName),
+                        ContentType = request.FeaturedImage.ContentType,
+                        FileSize = request.FeaturedImage.Length,
+                        UploadedBy = User.Identity?.Name ?? "Admin",
+                        UploadedDate = DateTime.UtcNow,
                         IsActive = true
                     };
 
@@ -336,21 +233,17 @@ namespace NewsPortalCMS.Controllers
                 }
             }
 
-            // ========================================================
-            // NEW VIDEO
-            // ========================================================
-
+            // Upload new video
             if (request.FeaturedVideo != null)
             {
                 _fileValidationService.ValidateVideo(
                     request.FeaturedVideo);
 
-                var newVideoPath =
-                    await _fileStorageService.SaveAsync(
-                        request.FeaturedVideo,
-                        "videos");
+                var newVideoPath = await _fileStorageService.SaveAsync(
+                    request.FeaturedVideo,
+                    "videos");
 
-                // Delete OLD VIDEO
+                // Delete old video
                 if (!string.IsNullOrWhiteSpace(
                     existingNews.FeaturedVideo))
                 {
@@ -360,36 +253,20 @@ namespace NewsPortalCMS.Controllers
 
                 videoPath = newVideoPath;
 
-                // Save new video in Media Library
+                // Save new video in media library
                 if (!string.IsNullOrEmpty(videoPath))
                 {
                     var media = new Media
                     {
-                        FileName =
-                            Path.GetFileName(videoPath),
-
-                        OriginalFileName =
-                            request.FeaturedVideo.FileName,
-
-                        FilePath =
-                            videoPath,
-
-                        FileType =
-                            Path.GetExtension(
-                                request.FeaturedVideo.FileName),
-
-                        ContentType =
-                            request.FeaturedVideo.ContentType,
-
-                        FileSize =
-                            request.FeaturedVideo.Length,
-
-                        UploadedBy =
-                            User.Identity?.Name ?? "Admin",
-
-                        UploadedDate =
-                            DateTime.UtcNow,
-
+                        FileName = Path.GetFileName(videoPath),
+                        OriginalFileName = request.FeaturedVideo.FileName,
+                        FilePath = videoPath,
+                        FileType = Path.GetExtension(
+                            request.FeaturedVideo.FileName),
+                        ContentType = request.FeaturedVideo.ContentType,
+                        FileSize = request.FeaturedVideo.Length,
+                        UploadedBy = User.Identity?.Name ?? "Admin",
+                        UploadedDate = DateTime.UtcNow,
                         IsActive = true
                     };
 
@@ -397,51 +274,25 @@ namespace NewsPortalCMS.Controllers
                 }
             }
 
-            // ========================================================
-            // UPDATE NEWS DTO
-            // ========================================================
-
+            // Update news DTO
             var dto = new UpdateNewsDto
             {
                 Id = id,
-
                 Title = request.Title,
-
                 Slug = request.Slug,
-
-                ShortDescription =
-                    request.ShortDescription,
-
-                Content =
-                    request.Content,
-
-                FeaturedImage =
-                    imagePath,
-
-                FeaturedVideo =
-                    videoPath,
-
-                Author =
-                    request.Author,
-
-                PublishDate =
-                    request.PublishDate,
-
-                IsPublished =
-                    request.IsPublished,
-
-                IsFeatured =
-                    request.IsFeatured,
-
-                CategoryId =
-                    request.CategoryId,
-
-                SubCategoryId =
-                    request.SubCategoryId
+                ShortDescription = request.ShortDescription,
+                Content = request.Content,
+                FeaturedImage = imagePath,
+                FeaturedVideo = videoPath,
+                Author = request.Author ?? string.Empty,
+                PublishDate = request.PublishDate,
+                IsPublished = request.IsPublished,
+                IsFeatured = request.IsFeatured,
+                CategoryId = request.CategoryId,
+                SubCategoryId = request.SubCategoryId
             };
 
-            var updatedNews =
-                await _newsService.UpdateAsync(dto);
+            var updatedNews = await _newsService.UpdateAsync(dto);
 
             if (updatedNews == null)
             {
@@ -454,17 +305,12 @@ namespace NewsPortalCMS.Controllers
             return Ok(updatedNews);
         }
 
-        // ============================================================
         // DELETE NEWS
-        // ADMIN / AUTHENTICATED ONLY
-        // ============================================================
-
         [Authorize]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var deleted =
-                await _newsService.DeleteAsync(id);
+            var deleted = await _newsService.DeleteAsync(id);
 
             if (!deleted)
             {
