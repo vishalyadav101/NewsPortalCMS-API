@@ -432,12 +432,12 @@ using (var scope = app.Services.CreateScope())
 // 10. HTTP REQUEST PIPELINE
 // ============================================================
 
-// Swagger sirf Development environment me enable hai.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// Swagger 
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
+
 
 
 // HTTP request ko HTTPS par redirect karta hai.
