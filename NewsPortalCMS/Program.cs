@@ -377,8 +377,11 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAngularApp", policy =>
     {
         policy
-            .WithOrigins("http://localhost:4200")
-            .AllowAnyHeader()
+            .WithOrigins(
+                "http://localhost:4200",
+                "https://news-portal-cms-dun.vercel.app"
+            )
+            .AllowAnyHeader()   
             .AllowAnyMethod();
     });
 });
